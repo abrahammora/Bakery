@@ -71,7 +71,7 @@ public class sql {
 	        Statement st = (Statement) conexion.createStatement();
 	        ResultSet rs;
 	        Object[] rows = null;
-	        rs = st.executeQuery("SELECT u.id_usuario,u.nombre,u.app,u.apm,u.domicilio,u.telefono,c.nombre_cargo,u.pass,u.salario,u.fecha_ingreso,u.fecha_despido FROM usuarios as u inner join cargo as c on u.id_cargo=c.id_cargo");
+	        rs = st.executeQuery("SELECT u.nombre,u.app,u.apm,u.domicilio,u.telefono,c.nombre_cargo,u.pass,u.salario,u.fecha_ingreso,u.fecha_despido FROM usuarios as u inner join cargo as c on u.id_cargo=c.id_cargo");
 	        java.sql.ResultSetMetaData rsm = rs.getMetaData();
 	        // crear una lista donde almacenare los datos
 	        ArrayList<Object[]> data=new ArrayList<>();
@@ -161,10 +161,9 @@ public class sql {
 		 
 	   }
 	
-	public void setUsuario(int id_usuario,int id_cargo,String nombre,String app,String apm,String domicilio,String tel,String pass,float salario,String datein,String dateexp) {
-		String sql = "insert into usuarios(id_usuario,id_cargo,nombre,app,apm,domicilio,telefono,pass,salario,fecha_ingreso,fecha_despido)"
-				+ "values("
-				+ "'"+id_usuario+"',"
+	public void setUsuario(int id_cargo,String nombre,String app,String apm,String domicilio,String tel,String pass,float salario,String datein,String dateexp) {
+		String sql = "insert into usuarios(id_cargo,nombre,app,apm,domicilio,telefono,pass,salario,fecha_ingreso,fecha_despido)"
+				+ "values("				
 				+ "'"+id_cargo+"',"
 				+ "'"+nombre+"',"
 				+ "'"+app+"',"
@@ -257,7 +256,7 @@ public class sql {
 	        Statement st = (Statement) conexion.createStatement();
 	        ResultSet rs;
 	        Object[] rows = null;
-	        rs = st.executeQuery("SELECT * from materia");
+	        rs = st.executeQuery("SELECT nombre_materia,cantidad,precio from materia");
 	        java.sql.ResultSetMetaData rsm = rs.getMetaData();
 	        // crear una lista donde almacenare los datos
 	        ArrayList<Object[]> data=new ArrayList<>();
@@ -302,7 +301,7 @@ public class sql {
 	        Statement st = (Statement) conexion.createStatement();
 	        ResultSet rs;
 	        Object[] rows = null;
-	        rs = st.executeQuery("SELECT p.id_producto,p.descripcion,p.nombre,ca.nombre_categoria,p.pcompra,p.pventa,p.fventa from producto as p inner join categoria_pan as ca on p.id_categoria=ca.id_categoria");
+	        rs = st.executeQuery("SELECT p.descripcion,p.nombre,ca.nombre_categoria,p.pventa,p.fventa from producto as p inner join categoria_pan as ca on p.id_categoria=ca.id_categoria");
 	        java.sql.ResultSetMetaData rsm = rs.getMetaData();
 	        // crear una lista donde almacenare los datos
 	        ArrayList<Object[]> data=new ArrayList<>();
@@ -340,11 +339,141 @@ public class sql {
 	     }
 		 
 	   }
+	public ArrayList<Object[]> searchPro(String name) {
+		Object[] rows;
+		try {
+			Statement st = (Statement) conexion.createStatement();
+			ResultSet result = st.executeQuery("select * from usuarios where nombre='"+name+"'");
+			 java.sql.ResultSetMetaData rsm = result.getMetaData();
+		        // crear una lista donde almacenare los datos
+		        ArrayList<Object[]> data=new ArrayList<>();
+		        // calcular el numero de filas y gebnerar la informacion para cada una
+		        while (result.next()) {            
+		              rows=new Object[rsm.getColumnCount()];
+		             for (int i = 0; i < rows.length; i++) {
+		                // generar los datos de cada fila 
+		                 rows[i]=result.getObject(i+1);
+		                 }
+		             // Guardar los datos consultados en una lista 
+		             data.add(rows);
+		         }
+		        result.close();
+		        return data;
+			
+		}catch(SQLException e) {
+			JOptionPane.showMessageDialog(null, e.getMessage(),"Error",JOptionPane.ERROR_MESSAGE);
+			return null;
+		}
+		
+	}
+	public ArrayList<Object[]> searchUser(String name) {
+		Object[] rows;
+		try {
+			Statement st = (Statement) conexion.createStatement();
+			ResultSet result = st.executeQuery("select * from usuarios where nombre='"+name+"'");
+			 java.sql.ResultSetMetaData rsm = result.getMetaData();
+		        // crear una lista donde almacenare los datos
+		        ArrayList<Object[]> data=new ArrayList<>();
+		        // calcular el numero de filas y gebnerar la informacion para cada una
+		        while (result.next()) {            
+		              rows=new Object[rsm.getColumnCount()];
+		             for (int i = 0; i < rows.length; i++) {
+		                // generar los datos de cada fila 
+		                 rows[i]=result.getObject(i+1);
+		                 }
+		             // Guardar los datos consultados en una lista 		             
+		             data.add(rows);
+		         }
+		        result.close();
+		        return data;
+		}catch(SQLException e) {
+			JOptionPane.showMessageDialog(null, e.getMessage(),"Error",JOptionPane.ERROR_MESSAGE);
+			return null;
+		}
+	}
 	
-	public void setMateria(int id_materia,String nombre,float cantidad,float precio) {
-		String sql="insert into materia(id_materia,nombre_materia,cantidad,precio) "
-				+ "values("
-				+ "'"+id_materia+"',"
+	public ArrayList<Object[]> search(String name) {				
+		Object[] rows;
+		try {						
+			Statement st = (Statement) conexion.createStatement();
+			ResultSet result = st.executeQuery("select * from usuarios where nombre='"+name+"'");
+			 java.sql.ResultSetMetaData rsm = result.getMetaData();
+		        // crear una lista donde almacenare los datos
+		        ArrayList<Object[]> data=new ArrayList<>();
+		        // calcular el numero de filas y gebnerar la informacion para cada una
+		        while (result.next()) {            
+		              rows=new Object[rsm.getColumnCount()];
+		             for (int i = 0; i < rows.length; i++) {
+		                // generar los datos de cada fila 
+		                 rows[i]=result.getObject(i+1);
+		                 }
+		             // Guardar los datos consultados en una lista 
+		             data.add(rows);
+		         }
+		        result.close();
+		        return data;
+		}catch(SQLException e) {
+			JOptionPane.showMessageDialog(null, e.getMessage(),"Error",JOptionPane.ERROR_MESSAGE);
+			return null;
+		}
+		//return id;
+	}
+	
+	public int idMateria(String r) {
+		int id = 0;
+		try {
+			Statement st = (Statement) conexion.createStatement();
+			ResultSet resul = st.executeQuery("select id_materia from materia where nombre_materia='"+r+"'");
+			while(resul.next()) {
+				id=resul.getInt("id_materia");
+			}
+			resul.close();
+			return id;
+		} catch (SQLException e) {
+			// TODO: handle exception
+			JOptionPane.showMessageDialog(null, e.getMessage(),"Error",JOptionPane.ERROR_MESSAGE);
+			return 0;
+		}
+		
+	}
+	public int idProducto(String r) {
+		int id = 0;
+		try {
+			Statement st = (Statement) conexion.createStatement();
+			ResultSet resul = st.executeQuery("select id_producto from producto where nombre='"+r+"'");
+			while(resul.next()) {
+				id=resul.getInt("id_producto");
+			}
+			resul.close();
+			return id;
+		} catch (SQLException e) {
+			// TODO: handle exception
+			JOptionPane.showMessageDialog(null, e.getMessage(),"Error",JOptionPane.ERROR_MESSAGE);
+			return 0;
+		}
+		
+	}
+	
+	public int idUser(String r) {
+		int id = 0;
+		try {
+			Statement st = (Statement) conexion.createStatement();
+			ResultSet resul = st.executeQuery("select id_usuario from usuarios where nombre='"+r+"'");
+			while(resul.next()) {
+				id=resul.getInt("id_usuario");
+			}
+			resul.close();
+			return id;
+		} catch (SQLException e) {
+			// TODO: handle exception
+			JOptionPane.showMessageDialog(null, e.getMessage(),"Error",JOptionPane.ERROR_MESSAGE);
+			return 0;
+		}
+		
+	}
+	public void setMateria(String nombre,float cantidad,float precio) {
+		String sql="insert into materia(nombre_materia,cantidad,precio) "
+				+ "values("				
 				+ "'"+nombre+"',"
 				+ "'"+cantidad+"',"
 				+ "'"+precio+"')";
@@ -416,13 +545,11 @@ public class sql {
 	}
 	
 	
-	public void setProducto(int id_producto,int id_categoria,String nombre,String descripcion,float pcompra,float pventa,String fventa) {
-		String sql="insert into producto(id_producto,id_categoria,nombre,descripcion,pcompra,pventa,fventa) values("
-				+ "'"+id_producto+"',"
+	public void setProducto(int id_categoria,String nombre,String descripcion,float pventa,String fventa) {
+		String sql="insert into producto(id_categoria,nombre,descripcion,pventa,fventa) values("				
 				+ "'"+id_categoria+"',"
 				+ "'"+nombre+"',"
-				+ "'"+descripcion+"',"
-				+ ""+pcompra+","
+				+ "'"+descripcion+"',"				
 				+ ""+pventa+","
 				+ "'"+fventa+"');";
 				
@@ -437,11 +564,10 @@ public class sql {
 				
 	}
 	
-	public void editarProducto(int id,int id_categoria,String nombre,String descripcion,float pcompra,float pventa,String fventa) {
+	public void editarProducto(int id,int id_categoria,String nombre,String descripcion,float pventa,String fventa) {
 		String sql="update producto set id_categoria="+id_categoria+","
 				+ "nombre='"+nombre+"',"
-				+ "descripcion='"+descripcion+"',"
-				+ "pcompra="+pcompra+","
+				+ "descripcion='"+descripcion+"',"				
 				+ "pventa="+pventa+","
 				+ "fventa="+fventa+" where id_producto="+id+";";
 		

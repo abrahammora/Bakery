@@ -39,15 +39,16 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.regex.Pattern;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.awt.event.FocusAdapter;
 import java.awt.event.FocusEvent;
 import javax.swing.UIManager;
+import com.toedter.calendar.JDayChooser;
 
 public class windowAdmin extends JFrame {
 
@@ -178,10 +179,10 @@ public class windowAdmin extends JFrame {
 							//col=table.getSelectedColumn();
 							
 								//row=table.getSelectedRow();
-								textField_id.setText(table.getValueAt(row,0).toString());
-								textField_mat.setText(table.getValueAt(row,1).toString());
-								textField_cant.setText(table.getValueAt(row ,2).toString());
-								textField_precio.setText(table.getValueAt(row,3).toString());
+								//textField_id.setText(table.getValueAt(row,0).toString());
+								textField_mat.setText(table.getValueAt(row,0).toString());
+								textField_cant.setText(table.getValueAt(row ,1).toString());
+								textField_precio.setText(table.getValueAt(row,2).toString());
 
 								
 								
@@ -198,7 +199,7 @@ public class windowAdmin extends JFrame {
 				{new Integer(3), "Huevo", "5", "40"},							
 			},
 			new String[] {
-				"Id", "Materia", "Cantidad", "Precio"
+				 "Materia", "Cantidad", "Precio"
 			}
 		) {
 			Class[] columnTypes = new Class[] {
@@ -229,7 +230,7 @@ public class windowAdmin extends JFrame {
 			public void actionPerformed(ActionEvent e) {
 				
 				//textField_aid.setEnabled(false);
-				textField_aid.setEditable(true);
+				//textField_aid.setEditable(true);
 				
 				
 				textField_amate.setEditable(true);
@@ -254,10 +255,10 @@ public class windowAdmin extends JFrame {
 			public void actionPerformed(ActionEvent arg0) {
 				String aid,amat,acant,apre; 							
 				if(table.getSelectedRow()>=0) {
-					if(textField_id.getText()!=null&&textField_mat.getText()!=null&&textField_cant.getText()!=null&&textField_precio.getText()!=null) {
-						aid=textField_id.getText();
+					if(/*textField_id.getText()!=null&&*/textField_mat.getText()!=null&&textField_cant.getText()!=null&&textField_precio.getText()!=null) {
+						/*aid=textField_id.getText();
 						textField_aid.setText(aid);
-						textField_aid.setEditable(false);						
+						textField_aid.setEditable(false);*/						
 						amat=textField_mat.getText();
 						textField_amate.setText(amat);
 						textField_amate.setEditable(true);						
@@ -289,9 +290,9 @@ public class windowAdmin extends JFrame {
 			public void actionPerformed(ActionEvent e) {
 				String aid,amat,acant,apre;
 				if(table.getSelectedRow()>=0) {
-					if(textField_id.getText()!=null&&textField_mat.getText()!=null&&textField_cant.getText()!=null&&textField_precio.getText()!=null) {
-						aid=textField_id.getText();
-						textField_aid.setText(aid);
+					if(/*textField_id.getText()!=null&&*/textField_mat.getText()!=null&&textField_cant.getText()!=null&&textField_precio.getText()!=null) {
+						/*aid=textField_id.getText();
+						textField_aid.setText(aid);*/
 	
 						
 						amat=textField_mat.getText();
@@ -337,46 +338,46 @@ public class windowAdmin extends JFrame {
 		lblMateriaSeleccionada.setFont(new Font("Tahoma", Font.BOLD, 12));
 		
 		JLabel lblCantidad = new JLabel("Cantidad");
-		lblCantidad.setBounds(239, 31, 55, 15);
+		lblCantidad.setBounds(184, 31, 55, 15);
 		panel_2.add(lblCantidad);
 		lblCantidad.setFont(new Font("Tahoma", Font.BOLD, 12));
 		
-		JLabel lblId = new JLabel("id");
+		/*JLabel lblId = new JLabel("id");
 		lblId.setBounds(21, 31, 62, 14);
 		panel_2.add(lblId);
-		lblId.setFont(new Font("Tahoma", Font.BOLD, 12));
+		lblId.setFont(new Font("Tahoma", Font.BOLD, 12));*/
 		
 		JLabel lblMateria = new JLabel("Materia");
-		lblMateria.setBounds(130, 31, 62, 14);
+		lblMateria.setBounds(37, 31, 62, 14);
 		panel_2.add(lblMateria);
 		lblMateria.setFont(new Font("Tahoma", Font.BOLD, 12));
 		
 		JLabel lblPrecio = new JLabel("Precio");
-		lblPrecio.setBounds(352, 31, 46, 14);
+		lblPrecio.setBounds(338, 31, 46, 14);
 		panel_2.add(lblPrecio);
 		lblPrecio.setFont(new Font("Tahoma", Font.BOLD, 12));
 		
-		textField_id = new JTextField();
+		/*textField_id = new JTextField();
 		textField_id.setEditable(false);
 		textField_id.setBounds(10, 56, 86, 20);
 		panel_2.add(textField_id);
-		textField_id.setColumns(10);
+		textField_id.setColumns(10);*/
 		
 		textField_mat = new JTextField();
 		textField_mat.setEditable(false);
-		textField_mat.setBounds(119, 56, 86, 20);
+		textField_mat.setBounds(10, 56, 86, 20);
 		panel_2.add(textField_mat);
 		textField_mat.setColumns(10);
 		
 		textField_cant = new JTextField();
 		textField_cant.setEditable(false);
-		textField_cant.setBounds(239, 56, 86, 20);
+		textField_cant.setBounds(172, 56, 86, 20);
 		panel_2.add(textField_cant);
 		textField_cant.setColumns(10);
 		
 		textField_precio = new JTextField();
 		textField_precio.setEditable(false);
-		textField_precio.setBounds(352, 56, 86, 20);
+		textField_precio.setBounds(318, 56, 86, 20);
 		panel_2.add(textField_precio);
 		textField_precio.setColumns(10);
 		
@@ -392,31 +393,31 @@ public class windowAdmin extends JFrame {
 		panel_3.add(lblDatos);
 		lblDatos.setFont(new Font("Tahoma", Font.BOLD, 12));
 		
-		textField_aid = new JTextField();
+		/*textField_aid = new JTextField();
 		textField_aid.setEditable(false);
 		textField_aid.setBounds(144, 72, 86, 20);
 		panel_3.add(textField_aid);
-		textField_aid.setColumns(10);
+		textField_aid.setColumns(10);*/
 		
-		JLabel lblId_1 = new JLabel("ID:");
+		/*JLabel lblId_1 = new JLabel("ID:");
 		lblId_1.setBounds(32, 74, 46, 14);
 		panel_3.add(lblId_1);
-		lblId_1.setFont(new Font("Tahoma", Font.BOLD, 12));
+		lblId_1.setFont(new Font("Tahoma", Font.BOLD, 12));*/
 		
 		JLabel lblMateria_1 = new JLabel("Materia:");
-		lblMateria_1.setBounds(32, 128, 68, 14);
+		lblMateria_1.setBounds(32, 82, 68, 14);
 		panel_3.add(lblMateria_1);
 		lblMateria_1.setFont(new Font("Tahoma", Font.BOLD, 12));
 		
 		textField_amate = new JTextField();
 		textField_amate.setEditable(false);
-		textField_amate.setBounds(144, 126, 86, 20);
+		textField_amate.setBounds(144, 80, 86, 20);
 		panel_3.add(textField_amate);
 		textField_amate.setColumns(10);
 		
 		textField_acanti = new JTextField();
 		textField_acanti.setEditable(false);
-		textField_acanti.setBounds(144, 185, 86, 20);
+		textField_acanti.setBounds(144, 165, 86, 20);
 		panel_3.add(textField_acanti);
 		textField_acanti.setColumns(10);
 		
@@ -426,13 +427,13 @@ public class windowAdmin extends JFrame {
 		panel_3.add(textField_apre);
 		textField_apre.setColumns(10);
 		
-		JLabel lblPrecio_1 = new JLabel("Precio(kg): ");
-		lblPrecio_1.setBounds(32, 252, 93, 14);
+		JLabel lblPrecio_1 = new JLabel("Precio Unitario: ");
+		lblPrecio_1.setBounds(32, 252, 102, 14);
 		panel_3.add(lblPrecio_1);
 		lblPrecio_1.setFont(new Font("Tahoma", Font.BOLD, 12));
 		
 		JLabel lblCantidad_1 = new JLabel("Cantidad(kg): ");
-		lblCantidad_1.setBounds(32, 187, 93, 14);
+		lblCantidad_1.setBounds(32, 167, 93, 14);
 		panel_3.add(lblCantidad_1);
 		lblCantidad_1.setFont(new Font("Tahoma", Font.BOLD, 12));
 		
@@ -442,27 +443,29 @@ public class windowAdmin extends JFrame {
 			public void actionPerformed(ActionEvent e) {
 				
 				if(btnChoice.getText()=="Modificar") {
-					String eid=textField_aid.getText();
+					//String eid=textField_aid.getText();
 					String emate=textField_amate.getText();
 					String ecant=textField_acanti.getText();
 					String epre=textField_apre.getText();
 					int row = table.getSelectedRow();
 					int column = table.getSelectedColumn();
-					
-					//if(row>=0) {
-						info.editarMateria(Integer.parseInt(eid), emate, Float.parseFloat(ecant), Float.parseFloat(epre));
-						textField_aid.setText("");
+					int id=info.idMateria(emate);
+					System.out.println(id);
+					//if(id>0) {
+						info.editarMateria(id, emate, Float.parseFloat(ecant), Float.parseFloat(epre));
+						info.consultaMateria(table);
+						//textField_aid.setText("");
 						textField_amate.setText("");
 						textField_acanti.setText("");
 						textField_apre.setText("");
 						
 						
-					      table.setValueAt(eid, row, 0);
-					      table.setValueAt(emate, row, 1);
-					      table.setValueAt(ecant, row, 2);
-					      table.setValueAt(epre, row, 3);
+					      //table.setValueAt(eid, row, 0);
+					    /*  table.setValueAt(emate, row, 0);
+					      table.setValueAt(ecant, row, 1);
+					      table.setValueAt(epre, row, 2);*/
 					      //table.setModel(dtm);
-					//}else
+					//}//else
 						//JOptionPane.showMessageDialog(null, "Debes seleccionar una materia","Advertencia",JOptionPane.WARNING_MESSAGE);
 					
 					/*textField_id.setText(table.getValueAt(row,0).toString());
@@ -476,19 +479,37 @@ public class windowAdmin extends JFrame {
 				      
 				}else if(btnChoice.getText()=="Agregar") {
 					validacion num = new validacion();
-					String id=textField_aid.getText().toString();
+					//String id=textField_aid.getText().toString();
 					String materia=textField_amate.getText().toString();
 					String cantidad=textField_acanti.getText().toString();
 					String precio=textField_apre.getText().toString();
+					ArrayList<Object[]> id=info.search(materia);
+					Object array = id.toArray();
+					//for(int i=0;i<array.length;i++)
+						//System.out.println(array.toString());
+																	
 					
+					boolean flag=false;
 					
-					
-						if(!id.equals("")&&!materia.equals("")&&!cantidad.equals("")&&!precio.equals("")) {
-							if(num.isNumeric(id)) {
+						if(/*!id.equals("")&&*/!materia.equals("")&&!cantidad.equals("")&&!precio.equals("")) {
+							//if(num.isNumeric(id)) {
 								if(num.isNumeric(cantidad)) {
 										if(num.isNumeric(precio)) {
-											info.setMateria(Integer.parseInt(id),materia, Float.parseFloat(cantidad), Float.parseFloat(precio));
-										       info.consultaMateria(table);
+											for(int i=0;i<id.size();i++) {
+												materia=id.get(i).toString();
+												flag=true;												
+											}
+												
+											if(flag) {
+												info.setMateria(materia, Float.parseFloat(cantidad), Float.parseFloat(precio));
+											       info.consultaMateria(table);
+											       textField_acanti.setText("");
+											       textField_apre.setText("");
+											       textField_amate.setText("");
+											}else
+												JOptionPane.showMessageDialog(null, "La materia ya existe","Advertencia",JOptionPane.WARNING_MESSAGE);
+												
+											
 											/*DefaultTableModel dtm = (DefaultTableModel) table.getModel();
 											 Object[] obj = new Object[4];
 										       obj[0]= id;
@@ -498,18 +519,16 @@ public class windowAdmin extends JFrame {
 										       dtm.addRow(obj);
 										       table.setModel(dtm);*/
 										       
-										       textField_aid.setText("");
-										       textField_acanti.setText("");
-										       textField_apre.setText("");
-										       textField_amate.setText("");
+									//	       textField_aid.setText("");
+										     
 
 										}else 
 											JOptionPane.showMessageDialog(null, "Precio debe ser numero","Error",JOptionPane.ERROR_MESSAGE);
 								}else
 									JOptionPane.showMessageDialog(null, "Cantidad debe ser numero","Error",JOptionPane.ERROR_MESSAGE);
 													
-							}else
-								JOptionPane.showMessageDialog(null, "Id debe ser numero");
+							/*}else
+								JOptionPane.showMessageDialog(null, "Id debe ser numero");*/
 						}else
 							JOptionPane.showMessageDialog(null, "Debes llenar todos los campos","Advertencia",JOptionPane.WARNING_MESSAGE);
 						 
@@ -527,16 +546,19 @@ public class windowAdmin extends JFrame {
 				}else if(btnChoice.getText()=="Eliminar") {
 					DefaultTableModel dtm = (DefaultTableModel) table.getModel();
 					int r = table.getSelectedRow();
-					String id = textField_aid.getText();
+					//String id = textField_aid.getText();
+					int id=info.idMateria(textField_amate.getText());
 					if(r>=0) {
 						   //int confirmar=JOptionPane.showConfirmDialog(null, 
 //											           "Esta seguro que desea eliminar el registro? ","Eliminar",JOptionPane.YES_OPTION); 
 						   //if(JOptionPane.OK_OPTION==confirmar) {
-								textField_aid.setText("");
+							info.eliminarMateria(id,table,r);
+
+								//textField_aid.setText("");
 								textField_amate.setText("");
 								textField_acanti.setText("");
 								textField_apre.setText("");
-								info.eliminarMateria(Integer.parseInt(id),table,r);
+								
 								//dtm.removeRow(r);
 								textField_id.setText("");															
 								textField_mat.setText("");																
@@ -572,14 +594,14 @@ public class windowAdmin extends JFrame {
 		panel_4.add(panel_5);
 		panel_5.setLayout(null);
 		
-		JLabel lblIdproducto = new JLabel("ID_Producto:");
+		/*JLabel lblIdproducto = new JLabel("ID_Producto:");
 		lblIdproducto.setFont(new Font("Tahoma", Font.BOLD, 12));
 		lblIdproducto.setBounds(10, 11, 97, 14);
-		panel_5.add(lblIdproducto);
+		panel_5.add(lblIdproducto);*/
 		
 		JLabel lblDescripcion = new JLabel("Descripcion:");
 		lblDescripcion.setFont(new Font("Tahoma", Font.BOLD, 12));
-		lblDescripcion.setBounds(10, 65, 76, 14);
+		lblDescripcion.setBounds(10, 90, 76, 14);
 		panel_5.add(lblDescripcion);
 		
 		JLabel lblCategoria = new JLabel("Categoria:");
@@ -587,14 +609,14 @@ public class windowAdmin extends JFrame {
 		lblCategoria.setBounds(252, 11, 76, 14);
 		panel_5.add(lblCategoria);
 		
-		JLabel lblPrecioCompra = new JLabel("Precio Compra:");
+		/*JLabel lblPrecioCompra = new JLabel("Precio Compra:");
 		lblPrecioCompra.setFont(new Font("Tahoma", Font.BOLD, 12));
 		lblPrecioCompra.setBounds(252, 65, 97, 14);
-		panel_5.add(lblPrecioCompra);
+		panel_5.add(lblPrecioCompra);*/
 		
 		JLabel lblPrecioVenta = new JLabel("Precio Venta:");
 		lblPrecioVenta.setFont(new Font("Tahoma", Font.BOLD, 12));
-		lblPrecioVenta.setBounds(252, 118, 83, 14);
+		lblPrecioVenta.setBounds(252, 90, 83, 14);
 		panel_5.add(lblPrecioVenta);
 		
 		JLabel lblFechaIngreso = new JLabel("Fecha Venta:");
@@ -602,13 +624,13 @@ public class windowAdmin extends JFrame {
 		lblFechaIngreso.setBounds(508, 11, 97, 14);
 		panel_5.add(lblFechaIngreso);
 		
-		textField_idpro = new JTextField();
+		/*textField_idpro = new JTextField();
 		textField_idpro.setBounds(109, 9, 86, 20);
 		panel_5.add(textField_idpro);
-		textField_idpro.setColumns(10);
+		textField_idpro.setColumns(10);*/
 		
 		textField_descrip = new JTextField();
-		textField_descrip.setBounds(109, 63, 86, 20);
+		textField_descrip.setBounds(109, 88, 86, 20);
 		panel_5.add(textField_descrip);
 		textField_descrip.setColumns(10);
 		
@@ -619,13 +641,13 @@ public class windowAdmin extends JFrame {
 		info.getCategoria(comboBox);
 		panel_5.add(comboBox);
 		
-		textField_pcompra = new JTextField();
+		/*textField_pcompra = new JTextField();
 		textField_pcompra.setBounds(359, 63, 86, 20);
 		panel_5.add(textField_pcompra);
-		textField_pcompra.setColumns(10);
+		textField_pcompra.setColumns(10);*/
 		
 		textField_pventa = new JTextField();
-		textField_pventa.setBounds(359, 116, 86, 20);
+		textField_pventa.setBounds(359, 88, 86, 20);
 		panel_5.add(textField_pventa);
 		textField_pventa.setColumns(10);
 		
@@ -663,17 +685,17 @@ public class windowAdmin extends JFrame {
 						JOptionPane.showMessageDialog(null, "EL tamaño de la fecha se excede");
 			}
 		});
+		
 		textField_indate.setBounds(615, 9, 86, 20);
 		panel_5.add(textField_indate);
-		textField_indate.setColumns(5);
-		
+		textField_indate.setColumns(5);		
 		JLabel lblNombre_1 = new JLabel("Nombre:");
 		lblNombre_1.setFont(new Font("Tahoma", Font.BOLD, 12));
-		lblNombre_1.setBounds(10, 119, 76, 14);
+		lblNombre_1.setBounds(10, 15, 76, 14);
 		panel_5.add(lblNombre_1);
 		
 		textField_panno = new JTextField();
-		textField_panno.setBounds(109, 116, 86, 20);
+		textField_panno.setBounds(109, 11, 86, 20);
 		panel_5.add(textField_panno);
 		textField_panno.setColumns(10);
 		
@@ -699,13 +721,13 @@ public class windowAdmin extends JFrame {
 						//col=table.getSelectedColumn();
 						
 							//row=table.getSelectedRow();
-							textField_idpro.setText(table_1.getValueAt(row,0).toString());
-							textField_descrip.setText(table_1.getValueAt(row,1).toString());
-							textField_panno.setText(table_1.getValueAt(row,2).toString());
-							comboBox.setSelectedItem(table_1.getValueAt(row, 3).toString());
-							textField_pcompra.setText(table_1.getValueAt(row,4).toString());
-							textField_pventa.setText(table_1.getValueAt(row,5).toString());
-							textField_indate.setText(table_1.getValueAt(row, 6).toString());																					
+							//textField_idpro.setText(table_1.getValueAt(row,0).toString());
+							textField_descrip.setText(table_1.getValueAt(row,0).toString());
+							textField_panno.setText(table_1.getValueAt(row,1).toString());
+							comboBox.setSelectedItem(table_1.getValueAt(row, 2).toString());
+							//textField_pcompra.setText(table_1.getValueAt(row,4).toString());
+							textField_pventa.setText(table_1.getValueAt(row,3).toString());
+							textField_indate.setText(table_1.getValueAt(row, 4).toString());																					
 					
 					
 				
@@ -719,7 +741,7 @@ public class windowAdmin extends JFrame {
 				{new Integer(1),"Pan bueno","Concha","Pastel","23","43","12/01/08"}
 			},
 			new String[] {
-				"Id_Producto", "Descripcion","Nombre" ,"Categoria", "Precio Compra", "Precio Venta", "Fecha Venta"
+				"Descripcion","Nombre" ,"Categoria", "Precio Venta", "Fecha Venta"
 			}
 		));
 		info.consultaProducto(table_1);
@@ -736,16 +758,18 @@ public class windowAdmin extends JFrame {
 				String pcmpra;
 				String pventa;
 				String fingre=null;
-				String name=textField_panno.getText().toString();
+				String name=textField_panno.getText();
 				des=textField_descrip.getText().toString();
 				fingre=textField_indate.getText().toString();
-				id=textField_idpro.getText().toString();
-				pcmpra=textField_pcompra.getText().toString();
+				//id=textField_idpro.getText().toString();
+				//pcmpra=textField_pcompra.getText().toString();
 				 pventa=textField_pventa.getText().toString();
 				 int id_categoria=comboBox.getSelectedIndex();
-				if(!id.equals("")&&!name.equals("")&&!fingre.equals("")&&!pcmpra.equals("")&&!pventa.equals("")) {							
-						 if(num.isNumeric(id)) {
-							 if(num.isNumeric(pcmpra)&&num.isNumeric(pventa)) {
+				 boolean flag=false;
+				 ArrayList<Object[]> nombres=info.searchPro(name);
+				if(/*!id.equals("")&&*/!name.equals("")&&!fingre.equals("")&&!pventa.equals("")) {							
+						 //if(num.isNumeric(id)) {
+							 if(/*num.isNumeric(pcmpra)&&*/num.isNumeric(pventa)) {
 							/* DefaultTableModel dtm = (DefaultTableModel) table_1.getModel();
 							 Object[] obj = new Object[7];
 						       obj[0]=id;
@@ -757,21 +781,29 @@ public class windowAdmin extends JFrame {
 						       obj[6]= fingre;					       
 						     dtm.addRow(obj);
 						     table_1.setModel(dtm);*/
-								 info.setProducto(Integer.parseInt(id),id_categoria, name, des, Float.parseFloat(pcmpra), Float.parseFloat(pventa), fingre);
-								 info.consultaProducto(table_1);
-						     
-						     textField_idpro.setText("");
-						     textField_indate.setText("");
-						     textField_descrip.setText("");
-						     textField_panno.setText("");
-						     textField_pcompra.setText("");
-						     textField_pventa.setText("");
+								 for(int i=0;i<nombres.size();i++) {
+									 name=nombres.get(i).toString();
+									 flag=true;
+								 }
+								 if(flag) {
+									 //info.setProducto(id_categoria, name, des, Float.parseFloat(pventa), fingre);
+									 info.consultaProducto(table_1);
+							     
+							     //textField_idpro.setText("");
+							     textField_indate.setText("");
+							     textField_descrip.setText("");
+							     textField_panno.setText("");
+							     //textField_pcompra.setText("");
+							     textField_pventa.setText("");
+								 }else
+									 JOptionPane.showMessageDialog(null, "El producto ya existe","Error",JOptionPane.ERROR_MESSAGE);
+								 
 							 }else 
 								 JOptionPane.showMessageDialog(null, "Precio Compra y Precio Venta deben ser numeros");
 				
  
-						 }else
-							JOptionPane.showMessageDialog(null, "id debe ser numero");
+						 /*}else
+							JOptionPane.showMessageDialog(null, "id debe ser numero");*/
 					
 												
 		
@@ -791,30 +823,32 @@ public class windowAdmin extends JFrame {
 		btnModificar_1.setBackground(new Color(240, 248, 255));
 		btnModificar_1.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				String id=textField_idpro.getText();
+				//String id=textField_idpro.getText();
 				String des=textField_descrip.getText();
 				String cate=(String) comboBox.getSelectedItem();
-				String pcmpra=textField_pcompra.getText();
+				//String pcmpra=textField_pcompra.getText();
 				String pventa=textField_pventa.getText();
 				String fingre=textField_indate.getText();
 				String name=textField_panno.getText();				
 				int id_categoria=comboBox.getSelectedIndex();
 				int row = table_1.getSelectedRow();
+				int id=info.idProducto(name);
 				if(row>=0) {
-					info.editarProducto(Integer.parseInt(id), id_categoria, name, des, Float.parseFloat(pcmpra),Float.parseFloat(pventa), fingre);					
-					table_1.setValueAt(id, row, 0);
+					info.editarProducto(id, id_categoria, name, des,Float.parseFloat(pventa), fingre);
+					info.consultaProducto(table_1);
+					/*table_1.setValueAt(id, row, 0);
 					table_1.setValueAt(des, row, 1);
 					table_1.setValueAt(name, row, 2);
 					table_1.setValueAt(cate, row, 3);
 					table_1.setValueAt(pcmpra, row, 4);
 					table_1.setValueAt(pventa, row, 5);
-					table_1.setValueAt(fingre, row, 6);
+					table_1.setValueAt(fingre, row, 6);*/
 					
-					textField_idpro.setText("");
+					//textField_idpro.setText("");
 					textField_descrip.setText("");
 					textField_panno.setText("");
 					//(String) comboBox.getSelectedItem();
-					textField_pcompra.setText("");
+					//textField_pcompra.setText("");
 					textField_pventa.setText("");
 					textField_indate.setText("");
 				
@@ -889,29 +923,29 @@ public class windowAdmin extends JFrame {
 		panel_6.add(panel_7);
 		panel_7.setLayout(null);
 		
-		JLabel lblIdusuario = new JLabel("ID_Usuario:");
+/*		JLabel lblIdusuario = new JLabel("ID_Usuario:");
 		lblIdusuario.setFont(new Font("Tahoma", Font.BOLD, 12));
 		lblIdusuario.setBounds(10, 11, 80, 14);
-		panel_7.add(lblIdusuario);
+		panel_7.add(lblIdusuario);*/
 		
 		JLabel lblDomicilio = new JLabel("Domicilio:");
 		lblDomicilio.setFont(new Font("Tahoma", Font.BOLD, 12));
-		lblDomicilio.setBounds(262, 11, 80, 14);
+		lblDomicilio.setBounds(10, 174, 80, 14);
 		panel_7.add(lblDomicilio);
 		
 		JLabel lblCargo = new JLabel("Cargo:");
 		lblCargo.setFont(new Font("Tahoma", Font.BOLD, 12));
-		lblCargo.setBounds(262, 115, 46, 14);
+		lblCargo.setBounds(262, 60, 46, 14);
 		panel_7.add(lblCargo);
 		
 		JLabel lblTelefono = new JLabel("Telefono:");
 		lblTelefono.setFont(new Font("Tahoma", Font.BOLD, 12));
-		lblTelefono.setBounds(262, 62, 72, 14);
+		lblTelefono.setBounds(262, 11, 72, 14);
 		panel_7.add(lblTelefono);
 		
 		JLabel lblFechaDeIngreso = new JLabel("Fecha de Ingreso:");
 		lblFechaDeIngreso.setFont(new Font("Tahoma", Font.BOLD, 12));
-		lblFechaDeIngreso.setBounds(475, 60, 120, 14);
+		lblFechaDeIngreso.setBounds(475, 11, 120, 14);
 		panel_7.add(lblFechaDeIngreso);
 		
 		JLabel lblFechaDespido = new JLabel("Fecha de Despido:");
@@ -919,19 +953,19 @@ public class windowAdmin extends JFrame {
 		lblFechaDespido.setBounds(475, 115, 120, 14);
 		panel_7.add(lblFechaDespido);
 		
-		textFieldiduser = new JTextField();
+		/*textFieldiduser = new JTextField();
 		textFieldiduser.setBounds(140, 9, 86, 20);
 		panel_7.add(textFieldiduser);
-		textFieldiduser.setColumns(10);
+		textFieldiduser.setColumns(10);*/
 		//textFieldiduser.setEditable(false);
 		
 		textFielddomici = new JTextField();
-		textFielddomici.setBounds(352, 9, 86, 20);
+		textFielddomici.setBounds(140, 168, 86, 20);
 		panel_7.add(textFielddomici);
 		textFielddomici.setColumns(10);
 		
 		textFieldtel = new JTextField();
-		textFieldtel.setBounds(352, 60, 86, 20);
+		textFieldtel.setBounds(344, 9, 86, 20);
 		panel_7.add(textFieldtel);
 		textFieldtel.setColumns(10);
 		
@@ -972,7 +1006,7 @@ public class windowAdmin extends JFrame {
 			        }
 			    }
 		});
-		textFielddate.setBounds(605, 60, 86, 20);
+		textFielddate.setBounds(605, 9, 86, 20);
 		panel_7.add(textFielddate);
 		textFielddate.setColumns(10);
 		
@@ -1018,7 +1052,7 @@ public class windowAdmin extends JFrame {
 		textFielddateexp.setColumns(10);
 		
 		JComboBox comboBox_1 = new JComboBox();
-		comboBox_1.setBounds(352, 113, 86, 20);		
+		comboBox_1.setBounds(344, 58, 86, 20);		
 		/*comboBox_1.addItem("Administrador");
 		comboBox_1.addItem("Vendedor");*/				
 		//if(s) {
@@ -1027,52 +1061,52 @@ public class windowAdmin extends JFrame {
 		panel_7.add(comboBox_1);
 		
 		textFieldname = new JTextField();
-		textFieldname.setBounds(140, 60, 86, 20);
+		textFieldname.setBounds(140, 9, 86, 20);
 		panel_7.add(textFieldname);
 		textFieldname.setColumns(10);
 		
 		JLabel lblNombre = new JLabel("Nombre:");
 		lblNombre.setFont(new Font("Tahoma", Font.BOLD, 12));
-		lblNombre.setBounds(10, 62, 66, 14);
+		lblNombre.setBounds(10, 11, 66, 14);
 		panel_7.add(lblNombre);
 		
 		JLabel lblApellidoPaterno = new JLabel("Apellido Paterno:");
 		lblApellidoPaterno.setFont(new Font("Tahoma", Font.BOLD, 12));
-		lblApellidoPaterno.setBounds(10, 113, 120, 14);
+		lblApellidoPaterno.setBounds(10, 62, 120, 14);
 		panel_7.add(lblApellidoPaterno);
 		
 		textFieldapp = new JTextField();
-		textFieldapp.setBounds(140, 113, 86, 20);
+		textFieldapp.setBounds(140, 60, 86, 20);
 		panel_7.add(textFieldapp);
 		textFieldapp.setColumns(10);
 		
 		JLabel lblApellidoMaterno = new JLabel("Apellido Materno:");
 		lblApellidoMaterno.setFont(new Font("Tahoma", Font.BOLD, 12));
-		lblApellidoMaterno.setBounds(10, 173, 120, 14);
+		lblApellidoMaterno.setBounds(10, 115, 120, 14);
 		panel_7.add(lblApellidoMaterno);
 		
 		textFieldapm = new JTextField();
-		textFieldapm.setBounds(140, 171, 86, 20);
+		textFieldapm.setBounds(140, 113, 86, 20);
 		panel_7.add(textFieldapm);
 		textFieldapm.setColumns(10);
 		
 		JLabel lblSalario = new JLabel("Salario:");
 		lblSalario.setFont(new Font("Tahoma", Font.BOLD, 12));
-		lblSalario.setBounds(475, 11, 72, 14);
+		lblSalario.setBounds(262, 174, 72, 14);
 		panel_7.add(lblSalario);
 		
 		textFieldsal = new JTextField();
-		textFieldsal.setBounds(605, 9, 86, 20);
+		textFieldsal.setBounds(344, 172, 86, 20);
 		panel_7.add(textFieldsal);
 		textFieldsal.setColumns(10);
 		
 		JLabel lblContrasea = new JLabel("Contrase\u00F1a:");
 		lblContrasea.setFont(new Font("Tahoma", Font.BOLD, 12));
-		lblContrasea.setBounds(262, 174, 80, 14);
+		lblContrasea.setBounds(262, 115, 80, 14);
 		panel_7.add(lblContrasea);
 		
 		textFieldpass = new JTextField();
-		textFieldpass.setBounds(352, 171, 86, 20);
+		textFieldpass.setBounds(344, 113, 86, 20);
 		panel_7.add(textFieldpass);
 		textFieldpass.setColumns(10);
 		
@@ -1097,18 +1131,18 @@ public class windowAdmin extends JFrame {
 						//col=table.getSelectedColumn();
 						
 							//row=table.getSelectedRow();
-							textFieldiduser.setText(table_2.getValueAt(row,0).toString());
-							textFieldname.setText(table_2.getValueAt(row, 1).toString());
-							textFieldapp.setText(table_2.getValueAt(row, 2).toString());
-							textFieldapm.setText(table_2.getValueAt(row, 3).toString());
+							//textFieldiduser.setText(table_2.getValueAt(row,0).toString());
+							textFieldname.setText(table_2.getValueAt(row, 0).toString());
+							textFieldapp.setText(table_2.getValueAt(row, 1).toString());
+							textFieldapm.setText(table_2.getValueAt(row, 2).toString());
 							
-							textFielddomici.setText(table_2.getValueAt(row,4).toString());
-							textFieldtel.setText(table_2.getValueAt(row,5).toString());
-							comboBox_1.setSelectedItem(table_2.getValueAt(row, 6).toString());
-							textFieldpass.setText(table_2.getValueAt(row, 7).toString());
-							textFieldsal.setText(table_2.getValueAt(row,8).toString());
-							textFielddate.setText(table_2.getValueAt(row,9).toString());
-							textFielddateexp.setText(table_2.getValueAt(row,10).toString());
+							textFielddomici.setText(table_2.getValueAt(row,3).toString());
+							textFieldtel.setText(table_2.getValueAt(row,4).toString());
+							comboBox_1.setSelectedItem(table_2.getValueAt(row, 5).toString());
+							textFieldpass.setText(table_2.getValueAt(row, 6).toString());
+							textFieldsal.setText(table_2.getValueAt(row,7).toString());
+							textFielddate.setText(table_2.getValueAt(row,8).toString());
+							textFielddateexp.setText(table_2.getValueAt(row,9).toString());
 							
 
 							
@@ -1130,7 +1164,7 @@ public class windowAdmin extends JFrame {
 				
 			},
 			new String[] {
-				"Id_Usuario", "Nombre","Apellido Paterno","Apellido Materno","Domicilio", "Telefono", "Cargo","Contraseña", "Salario","Fecha Ingreso", "Fecha Despido"
+					"Nombre","Apellido Paterno","Apellido Materno","Domicilio", "Telefono", "Cargo","Contraseña", "Salario","Fecha Ingreso", "Fecha Despido"
 			}
 		));
 		scrollPane_2.setViewportView(table_2);
@@ -1153,10 +1187,12 @@ public class windowAdmin extends JFrame {
 				String date=textFielddate.getText().toString();
 				String expdate=textFielddateexp.getText().toString();
 				String pass = textFieldpass.getText().toString();
-
+				ArrayList<Object[]> nombre = info.searchUser(name);
 				int id_cargo=comboBox_1.getSelectedIndex();
-				if(!iduser.equals("")&&!dom.equals("")&&!tel.equals("")&&!date.equals("")&&!name.equals("")&&!app.equals("")&&!apm.equals("")&&!salario.equals("")) {
-					if(num.isNumeric(iduser)) {
+				boolean flag=false;
+				//System.out.println(nombre);
+				if(/*!iduser.equals("")&&*/!dom.equals("")&&!tel.equals("")&&!date.equals("")&&!name.equals("")&&!app.equals("")&&!apm.equals("")&&!salario.equals("")) {
+					//if(num.isNumeric(iduser)) {
 						if(num.isNumeric(salario)) {
 							/*DefaultTableModel dtm = (DefaultTableModel) table_2.getModel();
 							 Object[] obj = new Object[11];
@@ -1171,29 +1207,36 @@ public class windowAdmin extends JFrame {
 						       obj[8]=salario;
 						       obj[9]= date;
 						       obj[10]= expdate;*/						      
-						       
-						       info.setUsuario(Integer.parseInt(iduser),id_cargo,name, app, apm, dom, pass,tel,Float.parseFloat(salario), date, expdate);
-						       info.consultas(table_2);
-						     //dtm.addRow(obj);
-						     //table_2.setModel(dtm);
+						       for(int i=0;i<nombre.size();i++) {
+						    	   name=nombre.get(i).toString();
+						    	   flag=true;
+						       }
+								if(flag) {
+									  //info.setUsuario(id_cargo,name, app, apm, dom, pass,tel,Float.parseFloat(salario), date, expdate);
+								       info.consultas(table_2);
+								     //dtm.addRow(obj);
+								     //table_2.setModel(dtm);
+								     
+								      textFieldiduser.setText("");
+								      textFieldname.setText("");
+								      textFieldapp.setText("");
+								      textFieldapm.setText("");
+								      textFieldsal.setText("");
+								      textFielddomici.setText("");
+								      comboBox_1.setSelectedItem("");
+								      textFieldtel.setText("");
+								      textFielddate.setText("");
+								      textFielddateexp.setText("");
+								      textFieldpass.setText("");
+								}else 
+									JOptionPane.showMessageDialog(null, "El usuario ya existe","Error",JOptionPane.ERROR_MESSAGE);
 						     
-						      textFieldiduser.setText("");
-						      textFieldname.setText("");
-						      textFieldapp.setText("");
-						      textFieldapm.setText("");
-						      textFieldsal.setText("");
-						      textFielddomici.setText("");
-						      comboBox_1.setSelectedItem("");
-						      textFieldtel.setText("");
-						      textFielddate.setText("");
-						      textFielddateexp.setText("");
-						      textFieldpass.setText("");
 
 						}else
 							JOptionPane.showMessageDialog(null, "Salario debe ser numero");
 									
-					}else
-						JOptionPane.showMessageDialog(null, "Id_Usuario de ser numero");
+					/*}else
+						JOptionPane.showMessageDialog(null, "Id_Usuario de ser numero");*/
 					
 				}else
 					JOptionPane.showMessageDialog(null, "Debes llenar todos los campos");
