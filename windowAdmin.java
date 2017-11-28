@@ -42,6 +42,8 @@ import java.sql.SQLException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.regex.Pattern;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
@@ -49,6 +51,7 @@ import java.awt.event.FocusAdapter;
 import java.awt.event.FocusEvent;
 import javax.swing.UIManager;
 import com.toedter.calendar.JDayChooser;
+import com.toedter.calendar.JDateChooser;
 
 public class windowAdmin extends JFrame {
 
@@ -651,7 +654,7 @@ public class windowAdmin extends JFrame {
 		panel_5.add(textField_pventa);
 		textField_pventa.setColumns(10);
 		
-		textField_indate = new JTextField("aaaa/mm/dd");
+		/*textField_indate = new JTextField("aaaa/mm/dd");
 		textField_indate.addFocusListener(new FocusAdapter() {
 			
 			 @Override
@@ -688,16 +691,19 @@ public class windowAdmin extends JFrame {
 		
 		textField_indate.setBounds(615, 9, 86, 20);
 		panel_5.add(textField_indate);
-		textField_indate.setColumns(5);		
+		textField_indate.setColumns(5);	*/	
 		JLabel lblNombre_1 = new JLabel("Nombre:");
 		lblNombre_1.setFont(new Font("Tahoma", Font.BOLD, 12));
 		lblNombre_1.setBounds(10, 15, 76, 14);
 		panel_5.add(lblNombre_1);
-		
 		textField_panno = new JTextField();
 		textField_panno.setBounds(109, 11, 86, 20);
 		panel_5.add(textField_panno);
 		textField_panno.setColumns(10);
+		
+		JDateChooser dateChooser = new JDateChooser();		
+		dateChooser.setBounds(615, 11, 133, 20);
+		panel_5.add(dateChooser);
 		
 		
 		JScrollPane scrollPane_1 = new JScrollPane();
@@ -727,7 +733,8 @@ public class windowAdmin extends JFrame {
 							comboBox.setSelectedItem(table_1.getValueAt(row, 2).toString());
 							//textField_pcompra.setText(table_1.getValueAt(row,4).toString());
 							textField_pventa.setText(table_1.getValueAt(row,3).toString());
-							textField_indate.setText(table_1.getValueAt(row, 4).toString());																					
+							//textField_indate.setText(table_1.getValueAt(row, 4).toString());
+							dateChooser.setDate((Date) table_1.getValueAt(row, 4));
 					
 					
 				
@@ -760,9 +767,15 @@ public class windowAdmin extends JFrame {
 				String fingre=null;
 				String name=textField_panno.getText();
 				des=textField_descrip.getText().toString();
-				fingre=textField_indate.getText().toString();
+				//fingre=textField_indate.getText().toString();
 				//id=textField_idpro.getText().toString();
 				//pcmpra=textField_pcompra.getText().toString();
+				String dia = Integer.toString(dateChooser.getCalendar().get(Calendar.DAY_OF_MONTH));
+				String mes = Integer.toString(dateChooser.getCalendar().get(Calendar.MONTH) + 1);
+				String year = Integer.toString(dateChooser.getCalendar().get(Calendar.YEAR));
+
+				 fingre = (year + "-" + mes + "-" + dia);				
+				
 				 pventa=textField_pventa.getText().toString();
 				 int id_categoria=comboBox.getSelectedIndex();
 				 boolean flag=false;
@@ -786,7 +799,7 @@ public class windowAdmin extends JFrame {
 									 flag=true;
 								 }
 								 if(flag) {
-									 //info.setProducto(id_categoria, name, des, Float.parseFloat(pventa), fingre);
+									 info.setProducto(id_categoria, name, des, Float.parseFloat(pventa), fingre);
 									 info.consultaProducto(table_1);
 							     
 							     //textField_idpro.setText("");
@@ -828,8 +841,14 @@ public class windowAdmin extends JFrame {
 				String cate=(String) comboBox.getSelectedItem();
 				//String pcmpra=textField_pcompra.getText();
 				String pventa=textField_pventa.getText();
-				String fingre=textField_indate.getText();
-				String name=textField_panno.getText();				
+				String fingre;
+				String name=textField_panno.getText();		
+				String dia = Integer.toString(dateChooser.getCalendar().get(Calendar.DAY_OF_MONTH));
+				String mes = Integer.toString(dateChooser.getCalendar().get(Calendar.MONTH) + 1);
+				String year = Integer.toString(dateChooser.getCalendar().get(Calendar.YEAR));
+
+				 fingre = (year + "-" + mes + "-" + dia);
+				// System.out.println(fingre);
 				int id_categoria=comboBox.getSelectedIndex();
 				int row = table_1.getSelectedRow();
 				int id=info.idProducto(name);
@@ -850,7 +869,8 @@ public class windowAdmin extends JFrame {
 					//(String) comboBox.getSelectedItem();
 					//textField_pcompra.setText("");
 					textField_pventa.setText("");
-					textField_indate.setText("");
+					//textField_indate.setText("");
+					dateChooser.setDate(null);
 				
 				}else {
 					JOptionPane.showMessageDialog(null, "Debes seleccionar un producto","Advertencia",JOptionPane.WARNING_MESSAGE);
@@ -969,7 +989,7 @@ public class windowAdmin extends JFrame {
 		panel_7.add(textFieldtel);
 		textFieldtel.setColumns(10);
 		
-		textFielddate = new JTextField("aaaa/mm/dd");
+		/*textFielddate = new JTextField("aaaa/mm/dd");
 		textFielddate.addKeyListener(new KeyAdapter() {
 			@Override
 			public void keyPressed(KeyEvent arg0) {
@@ -982,7 +1002,7 @@ public class windowAdmin extends JFrame {
 						Toolkit.getDefaultToolkit().beep();
 						System.out.println("ENTER");
 						
-					}*/
+					}
 						if(key!=55&&(key<48||key>57))
 							JOptionPane.showMessageDialog(null, "La fecha es incorrecta");
 					
@@ -1008,9 +1028,9 @@ public class windowAdmin extends JFrame {
 		});
 		textFielddate.setBounds(605, 9, 86, 20);
 		panel_7.add(textFielddate);
-		textFielddate.setColumns(10);
+		textFielddate.setColumns(10);*/
 		
-		textFielddateexp = new JTextField("aaaa/mm/dd");
+		/*textFielddateexp = new JTextField("aaaa/mm/dd");
 		textFielddateexp.addFocusListener(new FocusAdapter() {
 			 @Override
 			    public void focusGained(FocusEvent e) {
@@ -1049,7 +1069,7 @@ public class windowAdmin extends JFrame {
 		});
 		textFielddateexp.setBounds(605, 113, 86, 20);
 		panel_7.add(textFielddateexp);
-		textFielddateexp.setColumns(10);
+		textFielddateexp.setColumns(10);*/
 		
 		JComboBox comboBox_1 = new JComboBox();
 		comboBox_1.setBounds(344, 58, 86, 20);		
@@ -1110,6 +1130,14 @@ public class windowAdmin extends JFrame {
 		panel_7.add(textFieldpass);
 		textFieldpass.setColumns(10);
 		
+		JDateChooser dateChooser_1 = new JDateChooser();
+		dateChooser_1.setBounds(605, 11, 138, 20);
+		panel_7.add(dateChooser_1);
+		
+		JDateChooser dateChooser_2 = new JDateChooser();
+		dateChooser_2.setBounds(605, 115, 138, 20);
+		panel_7.add(dateChooser_2);
+		
 		JScrollPane scrollPane_2 = new JScrollPane();
 		scrollPane_2.setBounds(10, 248, 821, 102);
 		panel_6.add(scrollPane_2);
@@ -1141,8 +1169,8 @@ public class windowAdmin extends JFrame {
 							comboBox_1.setSelectedItem(table_2.getValueAt(row, 5).toString());
 							textFieldpass.setText(table_2.getValueAt(row, 6).toString());
 							textFieldsal.setText(table_2.getValueAt(row,7).toString());
-							textFielddate.setText(table_2.getValueAt(row,8).toString());
-							textFielddateexp.setText(table_2.getValueAt(row,9).toString());
+							dateChooser_1.setDate((Date)table_2.getValueAt(row,8));
+							dateChooser_2.setDate((Date)table_2.getValueAt(row,9));
 							
 
 							
@@ -1249,7 +1277,7 @@ public class windowAdmin extends JFrame {
 		btnModificar_2.setBackground(new Color(240, 248, 255));
 		btnModificar_2.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				String id=textFieldiduser.getText().toString();
+				
 				int id_cargo=comboBox_1.getSelectedIndex();
 
 				String nombre=textFieldname.getText().toString();
@@ -1259,24 +1287,32 @@ public class windowAdmin extends JFrame {
 				String tel=textFieldtel.getText().toString();
 				String pass=textFieldpass.getText().toString();
 				String salario=textFieldsal.getText().toString();
-				String datein=textFielddate.getText().toString();
-				String dateexp=textFielddateexp.getText().toString();
+				String datein;
+				String dateexp = null;
+				String dia = Integer.toString(dateChooser_1.getCalendar().get(Calendar.DAY_OF_MONTH));				
+				String mes = Integer.toString(dateChooser_1.getCalendar().get(Calendar.MONTH) + 1);
+				String year = Integer.toString(dateChooser_1.getCalendar().get(Calendar.YEAR));
+				
+				if(dateChooser_2.getCalendar()!=null) {
+					String dia2 = Integer.toString(dateChooser_2.getCalendar().get(Calendar.DAY_OF_MONTH));
+					String mes2 = Integer.toString(dateChooser_2.getCalendar().get(Calendar.MONTH) + 1);
+					String year2 = Integer.toString(dateChooser_2.getCalendar().get(Calendar.YEAR));
+					dateexp = (year2 + "-" + mes2 + "-" + dia2);
+				}else
+					dateexp=null;
+						
+				 datein = (year + "-" + mes + "-" + dia);
+				 //if(dia2!=null&&mes2!=null&&year2!=null)
+					 System.out.println(dateexp);
+				 //else
+					// dateexp=null;
+				 int id=info.idUser(nombre); 
 				int row = table_2.getSelectedRow();
 				if(row>=0) {
-					info.editarUsuario(Integer.parseInt(id), id_cargo, nombre, app, apm, domicilio, tel, pass, Float.parseFloat(salario), datein, dateexp);
+					info.editarUsuario(id, id_cargo, nombre, app, apm, domicilio, tel, pass, Float.parseFloat(salario), datein, dateexp);
+					info.consultas(table_2);
 					
-					
-					table_2.setValueAt(textFieldiduser.getText(), row, 0);
-					table_2.setValueAt(nombre, row, 1);
-					table_2.setValueAt(app, row, 2);
-					table_2.setValueAt(apm, row, 3);
-					table_2.setValueAt(domicilio, row, 4);
-					table_2.setValueAt(tel, row, 5);
-					table_2.setValueAt(comboBox_1.getSelectedItem(), row, 6);
-					table_2.setValueAt(pass, row, 7);
-					table_2.setValueAt(salario, row, 8);
-					table_2.setValueAt(datein, row, 9);
-					table_2.setValueAt(dateexp, row, 10);
+										
 					
 					textFieldiduser.setText("");
 
@@ -1287,8 +1323,8 @@ public class windowAdmin extends JFrame {
 					textFieldtel.setText("");
 					textFieldpass.setText("");
 					textFieldsal.setText("");
-					textFielddate.setText("");
-					textFielddateexp.setText("");
+					//textFielddate.setText("");
+					//textFielddateexp.setText("");
 				}else
 					JOptionPane.showMessageDialog(null, "Debes Seleccionar un usuario","Advertencia",JOptionPane.WARNING_MESSAGE);
 				

@@ -196,7 +196,7 @@ public class sql {
 	                + "fecha_despido='"+dateexp+"' "
 	                + "where id_usuario="+id+";";
 	                
-		 
+		 System.out.println(sql);
 		  int dec = JOptionPane.showConfirmDialog(null, "Desea editar el usuario seleccionado",
                   "Confirmar Edicion", JOptionPane.OK_CANCEL_OPTION);
 		  switch(dec){
@@ -497,7 +497,7 @@ public class sql {
 				 + "precio="+precio+" where id_materia="+id+";";
 	                
 	                
-		 //System.out.println(sql);
+		// System.out.println(sql);
 		  int dec = JOptionPane.showConfirmDialog(null, "Desea editar la materia seleccionada",
                "Confirmar Edicion", JOptionPane.OK_CANCEL_OPTION);
 		  switch(dec){
@@ -546,7 +546,7 @@ public class sql {
 	
 	
 	public void setProducto(int id_categoria,String nombre,String descripcion,float pventa,String fventa) {
-		String sql="insert into producto(id_categoria,nombre,descripcion,pventa,fventa) values("				
+		String sql="insert into producto(id_categoria,nombre,descripcion,pventa,date_format(fventa,'%d-%m-%Y')) values("				
 				+ "'"+id_categoria+"',"
 				+ "'"+nombre+"',"
 				+ "'"+descripcion+"',"				
@@ -569,8 +569,8 @@ public class sql {
 				+ "nombre='"+nombre+"',"
 				+ "descripcion='"+descripcion+"',"				
 				+ "pventa="+pventa+","
-				+ "fventa="+fventa+" where id_producto="+id+";";
-		
+				+ "fventa='"+fventa+"' where id_producto="+id+";";
+		//System.out.println(sql);
 		int dec = JOptionPane.showConfirmDialog(null, "Desea editar el producto seleccionado",
 	               "Confirmar Edicion", JOptionPane.OK_CANCEL_OPTION);
 			  switch(dec){
