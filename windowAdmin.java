@@ -44,6 +44,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.Iterator;
 import java.util.regex.Pattern;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
@@ -112,6 +113,7 @@ public class windowAdmin extends JFrame {
 	public windowAdmin() {
 		//windowAdmin frame = new windowAdmin();
 		sql info = new sql();
+		validacion num = new validacion();
 		boolean s = info.GetConnection("root", "");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 882, 528);		
@@ -300,14 +302,17 @@ public class windowAdmin extends JFrame {
 						
 						amat=textField_mat.getText();
 						textField_amate.setText(amat);
+						textField_amate.setEditable(false);
 	
 						
 						acant=textField_cant.getText();
 						textField_acanti.setText(acant);
+						textField_acanti.setEditable(false);
 	
 						
 						apre=textField_precio.getText();
 						textField_apre.setText(apre);
+						textField_apre.setEditable(false);
 	
 						btnChoice.setText("Eliminar");
 					}
@@ -486,25 +491,17 @@ public class windowAdmin extends JFrame {
 					String materia=textField_amate.getText().toString();
 					String cantidad=textField_acanti.getText().toString();
 					String precio=textField_apre.getText().toString();
-					ArrayList<Object[]> id=info.search(materia);
-					Object array = id.toArray();
-					//for(int i=0;i<array.length;i++)
-						//System.out.println(array.toString());
+								
 																	
 					
-					boolean flag=false;
 					
-						if(/*!id.equals("")&&*/!materia.equals("")&&!cantidad.equals("")&&!precio.equals("")) {
-							//if(num.isNumeric(id)) {
+					
+						if(!materia.equals("")&&!cantidad.equals("")&&!precio.equals("")) {							
 								if(num.isNumeric(cantidad)) {
-										if(num.isNumeric(precio)) {
-											for(int i=0;i<id.size();i++) {
-												materia=id.get(i).toString();
-												flag=true;												
-											}
+										if(num.isNumeric(precio)) {											
 												
-											if(flag) {
-												info.setMateria(materia, Float.parseFloat(cantidad), Float.parseFloat(precio));
+											if(info.search(materia)) {
+												   info.setMateria(materia, Float.parseFloat(cantidad), Float.parseFloat(precio));
 											       info.consultaMateria(table);
 											       textField_acanti.setText("");
 											       textField_apre.setText("");
@@ -530,8 +527,8 @@ public class windowAdmin extends JFrame {
 								}else
 									JOptionPane.showMessageDialog(null, "Cantidad debe ser numero","Error",JOptionPane.ERROR_MESSAGE);
 													
-							/*}else
-								JOptionPane.showMessageDialog(null, "Id debe ser numero");*/
+							
+								
 						}else
 							JOptionPane.showMessageDialog(null, "Debes llenar todos los campos","Advertencia",JOptionPane.WARNING_MESSAGE);
 						 
@@ -563,7 +560,7 @@ public class windowAdmin extends JFrame {
 								textField_apre.setText("");
 								
 								//dtm.removeRow(r);
-								textField_id.setText("");															
+								//textField_id.setText("");															
 								textField_mat.setText("");																
 								textField_cant.setText("");																
 								textField_precio.setText("");
@@ -762,7 +759,7 @@ public class windowAdmin extends JFrame {
 				String id;
 				String des=null;
 				String cate=(String) comboBox.getSelectedItem();
-				String pcmpra;
+				String nom;
 				String pventa;
 				String fingre=null;
 				String name=textField_panno.getText();
@@ -770,19 +767,23 @@ public class windowAdmin extends JFrame {
 				//fingre=textField_indate.getText().toString();
 				//id=textField_idpro.getText().toString();
 				//pcmpra=textField_pcompra.getText().toString();
-				String dia = Integer.toString(dateChooser.getCalendar().get(Calendar.DAY_OF_MONTH));
-				String mes = Integer.toString(dateChooser.getCalendar().get(Calendar.MONTH) + 1);
-				String year = Integer.toString(dateChooser.getCalendar().get(Calendar.YEAR));
-
-				 fingre = (year + "-" + mes + "-" + dia);				
+				if(dateChooser.getDate()!=null) {
+					String dia = Integer.toString(dateChooser.getCalendar().get(Calendar.DAY_OF_MONTH));
+					String mes = Integer.toString(dateChooser.getCalendar().get(Calendar.MONTH) + 1);
+					String year = Integer.toString(dateChooser.getCalendar().get(Calendar.YEAR));
+					fingre = (year + "-" + mes + "-" + dia);
+				}
 				
+
+				 
 				 pventa=textField_pventa.getText().toString();
-				 int id_categoria=comboBox.getSelectedIndex();
+				 //nom=info.searchPro(name);				 
+				 int id_categoria=comboBox.getSelectedIndex();				 
 				 boolean flag=false;
-				 ArrayList<Object[]> nombres=info.searchPro(name);
-				if(/*!id.equals("")&&*/!name.equals("")&&!fingre.equals("")&&!pventa.equals("")) {							
-						 //if(num.isNumeric(id)) {
-							 if(/*num.isNumeric(pcmpra)&&*/num.isNumeric(pventa)) {
+				 //ArrayList<Object[]> nombres= new ArrayList<Object[]>();
+				 //nombres=info.searchPro(name);				
+				if(!name.equals("")&&!fingre.equals("")&&!pventa.equals("")) {													
+							 if(num.isNumeric(pventa)) {
 							/* DefaultTableModel dtm = (DefaultTableModel) table_1.getModel();
 							 Object[] obj = new Object[7];
 						       obj[0]=id;
@@ -794,32 +795,33 @@ public class windowAdmin extends JFrame {
 						       obj[6]= fingre;					       
 						     dtm.addRow(obj);
 						     table_1.setModel(dtm);*/
-								 for(int i=0;i<nombres.size();i++) {
-									 name=nombres.get(i).toString();
-									 flag=true;
-								 }
-								 if(flag) {
+								/* for(int i=0;i<nombres.size();i++) {
+									 if(name==nombres.get(i).toString())										 
+										 flag=true;
+								 }*/
+									
+								 if(!info.searchPro(name)) {
+									
+									     JOptionPane.showMessageDialog(null, "El producto ya existe","Error",JOptionPane.ERROR_MESSAGE);
+								 }else {
+									 		
 									 info.setProducto(id_categoria, name, des, Float.parseFloat(pventa), fingre);
 									 info.consultaProducto(table_1);
-							     
-							     //textField_idpro.setText("");
-							     textField_indate.setText("");
-							     textField_descrip.setText("");
-							     textField_panno.setText("");
-							     //textField_pcompra.setText("");
-							     textField_pventa.setText("");
-								 }else
-									 JOptionPane.showMessageDialog(null, "El producto ya existe","Error",JOptionPane.ERROR_MESSAGE);
+						     
+								     //textField_idpro.setText("");
+								     //textField_indate.setText("");
+								     textField_descrip.setText("");
+								     textField_panno.setText("");
+								     //textField_pcompra.setText("");
+								     textField_pventa.setText("");
+								     dateChooser.setDate(null); 
+								 }
+									 
 								 
 							 }else 
-								 JOptionPane.showMessageDialog(null, "Precio Compra y Precio Venta deben ser numeros");
+								 JOptionPane.showMessageDialog(null, "Precio Venta Incorrecto");
 				
- 
-						 /*}else
-							JOptionPane.showMessageDialog(null, "id debe ser numero");*/
-					
-												
-		
+						 																										
 				}else {					
 
 					JOptionPane.showMessageDialog(null, "Debes llenar todos los campos");
@@ -884,35 +886,36 @@ public class windowAdmin extends JFrame {
 		btnEliminar_1.setBackground(new Color(240, 248, 255));
 		btnEliminar_1.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				String id=textField_idpro.getText();
-				String des=textField_descrip.getText();
-				String cate=(String) comboBox.getSelectedItem();
-				String pcmpra=textField_pcompra.getText();
-				String pventa=textField_pventa.getText();
-				String fingre=textField_indate.getText();
+				//String id=textField_idpro.getText();
+				//String des=textField_descrip.getText();
+				//String cate=(String) comboBox.getSelectedItem();
+				//String pcmpra=textField_pcompra.getText();
+				//String pventa=textField_pventa.getText();
+				//String fingre=textField_indate.getText();
 				String name=textField_panno.getText();
 				int row = table_1.getSelectedRow();
+				int id=info.idProducto(name);
 				if(row>=0) {					
-					table_1.setValueAt(id, row, 0);
-					table_1.setValueAt(des, row, 1);
-					table_1.setValueAt(name, row, 2);
-					table_1.setValueAt(cate, row,3);
-					table_1.setValueAt(pcmpra, row, 4);
-					table_1.setValueAt(pventa, row, 5);
-					table_1.setValueAt(fingre, row, 6);
+					//table_1.setValueAt(id, row, 0);
+					/*table_1.setValueAt(des, row, 0);
+					table_1.setValueAt(name, row, 1);
+					table_1.setValueAt(cate, row,2);
+					table_1.setValueAt(pcmpra, row, 3);
+					table_1.setValueAt(pventa, row, 4);
+					table_1.setValueAt(fingre, row, 5);*/
 					
-					info.eliminarProducto(Integer.parseInt(id),table_1,row);
+					info.eliminarProducto(id,table_1,row);
 					/*DefaultTableModel dtm = (DefaultTableModel) table_1.getModel();
 					int r = table_1.getSelectedRow();
 					dtm.removeRow(r);*/
 					
-					
-					textField_idpro.setText("");
 					textField_descrip.setText("");
-					//(String) comboBox.getSelectedItem();
-					textField_pcompra.setText("");
+					//String cate=(String) comboBox.getSelectedItem();
+					//textField_pcompra.setText("");
 					textField_pventa.setText("");
-					textField_indate.setText("");
+					dateChooser.setDate(null);
+					textField_panno.setText("");
+				
 				
 				}else
 					JOptionPane.showMessageDialog(null, "Debes seleccionar un producto","Advertencia",JOptionPane.WARNING_MESSAGE);
@@ -968,10 +971,10 @@ public class windowAdmin extends JFrame {
 		lblFechaDeIngreso.setBounds(475, 11, 120, 14);
 		panel_7.add(lblFechaDeIngreso);
 		
-		JLabel lblFechaDespido = new JLabel("Fecha de Despido:");
+		/*JLabel lblFechaDespido = new JLabel("Fecha de Despido:");
 		lblFechaDespido.setFont(new Font("Tahoma", Font.BOLD, 12));
 		lblFechaDespido.setBounds(475, 115, 120, 14);
-		panel_7.add(lblFechaDespido);
+		panel_7.add(lblFechaDespido);*/
 		
 		/*textFieldiduser = new JTextField();
 		textFieldiduser.setBounds(140, 9, 86, 20);
@@ -1134,9 +1137,9 @@ public class windowAdmin extends JFrame {
 		dateChooser_1.setBounds(605, 11, 138, 20);
 		panel_7.add(dateChooser_1);
 		
-		JDateChooser dateChooser_2 = new JDateChooser();
+		/*JDateChooser dateChooser_2 = new JDateChooser();
 		dateChooser_2.setBounds(605, 115, 138, 20);
-		panel_7.add(dateChooser_2);
+		panel_7.add(dateChooser_2);*/
 		
 		JScrollPane scrollPane_2 = new JScrollPane();
 		scrollPane_2.setBounds(10, 248, 821, 102);
@@ -1170,7 +1173,7 @@ public class windowAdmin extends JFrame {
 							textFieldpass.setText(table_2.getValueAt(row, 6).toString());
 							textFieldsal.setText(table_2.getValueAt(row,7).toString());
 							dateChooser_1.setDate((Date)table_2.getValueAt(row,8));
-							dateChooser_2.setDate((Date)table_2.getValueAt(row,9));
+							//dateChooser_2.setDate((Date)table_2.getValueAt(row,9));
 							
 
 							
@@ -1192,7 +1195,7 @@ public class windowAdmin extends JFrame {
 				
 			},
 			new String[] {
-					"Nombre","Apellido Paterno","Apellido Materno","Domicilio", "Telefono", "Cargo","Contraseña", "Salario","Fecha Ingreso", "Fecha Despido"
+					"Nombre","Apellido Paterno","Apellido Materno","Domicilio", "Telefono", "Cargo","Contraseña", "Salario","Fecha Ingreso"
 			}
 		));
 		scrollPane_2.setViewportView(table_2);
@@ -1204,23 +1207,29 @@ public class windowAdmin extends JFrame {
 		btnAgregar_2.setBackground(new Color(240, 248, 255));
 		btnAgregar_2.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				validacion num = new validacion();
-				String iduser=textFieldiduser.getText().toString();
+				
+				//String iduser=textFieldiduser.getText().toString();
 				String name=textFieldname.getText().toString();
 				String app=textFieldapp.getText().toString();
 				String apm=textFieldapm.getText().toString();
 				String dom=textFielddomici.getText().toString();
 				String tel=textFieldtel.getText().toString();
 				String salario=textFieldsal.getText().toString();
-				String date=textFielddate.getText().toString();
-				String expdate=textFielddateexp.getText().toString();
-				String pass = textFieldpass.getText().toString();
-				ArrayList<Object[]> nombre = info.searchUser(name);
+				String date = null;
+				String expdate;
+				String pass = textFieldpass.getText().toString();								
 				int id_cargo=comboBox_1.getSelectedIndex();
-				boolean flag=false;
+				boolean flag=info.searchUser(name);
+				if(dateChooser_1.getDate()!=null) {
+					String dia = Integer.toString(dateChooser_1.getCalendar().get(Calendar.DAY_OF_MONTH));				
+					String mes = Integer.toString(dateChooser_1.getCalendar().get(Calendar.MONTH) + 1);
+					String year = Integer.toString(dateChooser_1.getCalendar().get(Calendar.YEAR));
+					date=(year + "-" + mes + "-" + dia);
+				}
+				
+				
 				//System.out.println(nombre);
-				if(/*!iduser.equals("")&&*/!dom.equals("")&&!tel.equals("")&&!date.equals("")&&!name.equals("")&&!app.equals("")&&!apm.equals("")&&!salario.equals("")) {
-					//if(num.isNumeric(iduser)) {
+				if(!dom.equals("")&&!tel.equals("")&&!date.equals("")&&!name.equals("")&&!app.equals("")&&!apm.equals("")&&!salario.equals("")) {					
 						if(num.isNumeric(salario)) {
 							/*DefaultTableModel dtm = (DefaultTableModel) table_2.getModel();
 							 Object[] obj = new Object[11];
@@ -1234,18 +1243,14 @@ public class windowAdmin extends JFrame {
 						       obj[7]=pass;
 						       obj[8]=salario;
 						       obj[9]= date;
-						       obj[10]= expdate;*/						      
-						       for(int i=0;i<nombre.size();i++) {
-						    	   name=nombre.get(i).toString();
-						    	   flag=true;
-						       }
-								if(flag) {
-									  //info.setUsuario(id_cargo,name, app, apm, dom, pass,tel,Float.parseFloat(salario), date, expdate);
-								       info.consultas(table_2);
+						       obj[10]= expdate;*/						      						      
+								if(info.searchUser(name)) {
+									  info.setUsuario(id_cargo,name, app, apm, dom, pass,tel,Float.parseFloat(salario), date);
+								      info.consultas(table_2);
 								     //dtm.addRow(obj);
 								     //table_2.setModel(dtm);
 								     
-								      textFieldiduser.setText("");
+								     // textFieldiduser.setText("");
 								      textFieldname.setText("");
 								      textFieldapp.setText("");
 								      textFieldapm.setText("");
@@ -1253,18 +1258,20 @@ public class windowAdmin extends JFrame {
 								      textFielddomici.setText("");
 								      comboBox_1.setSelectedItem("");
 								      textFieldtel.setText("");
-								      textFielddate.setText("");
-								      textFielddateexp.setText("");
+//								      textFielddate.setText("");
+								      dateChooser_1.setDate(null);
+								      
+								      
 								      textFieldpass.setText("");
 								}else 
 									JOptionPane.showMessageDialog(null, "El usuario ya existe","Error",JOptionPane.ERROR_MESSAGE);
 						     
 
 						}else
-							JOptionPane.showMessageDialog(null, "Salario debe ser numero");
+							JOptionPane.showMessageDialog(null, "Salario Incorrecto");
 									
-					/*}else
-						JOptionPane.showMessageDialog(null, "Id_Usuario de ser numero");*/
+					
+						
 					
 				}else
 					JOptionPane.showMessageDialog(null, "Debes llenar todos los campos");
@@ -1276,8 +1283,7 @@ public class windowAdmin extends JFrame {
 		JButton btnModificar_2 = new JButton("Modificar");
 		btnModificar_2.setBackground(new Color(240, 248, 255));
 		btnModificar_2.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				
+			public void actionPerformed(ActionEvent e) {				
 				int id_cargo=comboBox_1.getSelectedIndex();
 
 				String nombre=textFieldname.getText().toString();
@@ -1287,42 +1293,56 @@ public class windowAdmin extends JFrame {
 				String tel=textFieldtel.getText().toString();
 				String pass=textFieldpass.getText().toString();
 				String salario=textFieldsal.getText().toString();
-				String datein;
+				String datein=null;				
 				String dateexp = null;
-				String dia = Integer.toString(dateChooser_1.getCalendar().get(Calendar.DAY_OF_MONTH));				
-				String mes = Integer.toString(dateChooser_1.getCalendar().get(Calendar.MONTH) + 1);
-				String year = Integer.toString(dateChooser_1.getCalendar().get(Calendar.YEAR));
 				
-				if(dateChooser_2.getCalendar()!=null) {
+				if(dateChooser_1.getDate()!=null) {
+					String dia = Integer.toString(dateChooser_1.getCalendar().get(Calendar.DAY_OF_MONTH));				
+					String mes = Integer.toString(dateChooser_1.getCalendar().get(Calendar.MONTH) + 1);
+					String year = Integer.toString(dateChooser_1.getCalendar().get(Calendar.YEAR));
+					datein = (year + "-" + mes + "-" + dia);
+				}
+				
+				
+				/*if(dateChooser_2.getCalendar()!=null) {
 					String dia2 = Integer.toString(dateChooser_2.getCalendar().get(Calendar.DAY_OF_MONTH));
 					String mes2 = Integer.toString(dateChooser_2.getCalendar().get(Calendar.MONTH) + 1);
 					String year2 = Integer.toString(dateChooser_2.getCalendar().get(Calendar.YEAR));
 					dateexp = (year2 + "-" + mes2 + "-" + dia2);
+					
 				}else
-					dateexp=null;
+					dateexp=null;*/
 						
-				 datein = (year + "-" + mes + "-" + dia);
+				 
 				 //if(dia2!=null&&mes2!=null&&year2!=null)
 					 System.out.println(dateexp);
 				 //else
 					// dateexp=null;
 				 int id=info.idUser(nombre); 
 				int row = table_2.getSelectedRow();
-				if(row>=0) {
-					info.editarUsuario(id, id_cargo, nombre, app, apm, domicilio, tel, pass, Float.parseFloat(salario), datein, dateexp);
-					info.consultas(table_2);
+				if(row>=0) {					
+						info.editarUsuario(id, id_cargo, nombre, app, apm, domicilio, tel, pass, Float.parseFloat(salario), datein);
+						
+						
+						
+						info.consultas(table_2);
+						
+						textFieldname.setText("");
+						textFieldapp.setText("");
+						textFieldapm.setText("");
+						textFielddomici.setText("");
+						textFieldtel.setText("");
+						textFieldpass.setText("");
+						textFieldsal.setText("");
+						dateChooser_1.setDate(null);						
+						
+						
+					
+					
 					
 										
 					
-					textFieldiduser.setText("");
-
-					textFieldname.setText("");
-					textFieldapp.setText("");
-					textFieldapm.setText("");
-					textFielddomici.setText("");
-					textFieldtel.setText("");
-					textFieldpass.setText("");
-					textFieldsal.setText("");
+					
 					//textFielddate.setText("");
 					//textFielddateexp.setText("");
 				}else
@@ -1337,7 +1357,7 @@ public class windowAdmin extends JFrame {
 		btnEliminar_2.setBackground(new Color(240, 248, 255));
 		btnEliminar_2.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				String id=textFieldiduser.getText().toString();
+				//String id=textFieldiduser.getText().toString();
 
 				String nombre=textFieldname.getText().toString();
 				String app=textFieldapp.getText().toString();
@@ -1346,11 +1366,11 @@ public class windowAdmin extends JFrame {
 				String tel=textFieldtel.getText().toString();
 				String pass=textFieldpass.getText().toString();
 				String salario=textFieldsal.getText().toString();
-				String datein=textFielddate.getText().toString();
-				String dateexp=textFielddateexp.getText().toString();
+				//String datein=textFielddate.getText().toString();
+				//String dateexp=textFielddateexp.getText().toString();
 				int row = table_2.getSelectedRow();
 				if(row>=0) {									
-					table_2.setValueAt(textFieldiduser.getText(), row, 0);
+					/*table_2.setValueAt(textFieldiduser.getText(), row, 0);
 					table_2.setValueAt(nombre, row, 1);
 					table_2.setValueAt(app, row, 2);
 					table_2.setValueAt(apm, row, 3);
@@ -1360,15 +1380,15 @@ public class windowAdmin extends JFrame {
 					table_2.setValueAt(pass, row, 7);
 					table_2.setValueAt(salario, row, 8);
 					table_2.setValueAt(datein, row, 9);
-					table_2.setValueAt(dateexp, row, 10);
-					
-					info.eliminarUsuario(Integer.parseInt(id),table_2,row);
+					table_2.setValueAt(dateexp, row, 10);*/
+					int id=info.idUser(nombre);
+					info.eliminarUsuario(id,table_2,row);
 					
 					/*DefaultTableModel dtm = (DefaultTableModel) table_2.getModel();
 					int r = table_2.getSelectedRow();
 					dtm.removeRow(r);*/
 					
-					textFieldiduser.setText("");
+					//textFieldiduser.setText("");
 
 					textFieldname.setText("");
 					textFieldapp.setText("");
@@ -1377,8 +1397,9 @@ public class windowAdmin extends JFrame {
 					textFieldtel.setText("");
 					textFieldpass.setText("");
 					textFieldsal.setText("");
-					textFielddate.setText("");
-					textFielddateexp.setText("");
+					//textFielddate.setText("");
+					dateChooser_1.setDate(null);
+					//textFielddateexp.setText("");
 				}else
 					JOptionPane.showMessageDialog(null, "Debes seleccionar un usuario","Advertencia",JOptionPane.WARNING_MESSAGE);
 				
