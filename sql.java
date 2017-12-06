@@ -1,14 +1,25 @@
+import java.awt.Image;
+import java.awt.image.BufferedImage;
+import java.awt.image.BufferedImageFilter;
+import java.io.ByteArrayInputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.sql.Array;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.logging.Logger;
 
+import javax.imageio.ImageIO;
 import javax.swing.DefaultComboBoxModel;
+import javax.swing.ImageIcon;
 import javax.swing.JComboBox;
 import javax.swing.JOptionPane;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
 
+import com.mysql.jdbc.Blob;
 import com.mysql.jdbc.Connection;
 import com.mysql.jdbc.Driver;
 import com.mysql.jdbc.ResultSetMetaData;
@@ -34,6 +45,14 @@ public class sql {
 			JOptionPane.showMessageDialog(null, e.getMessage(),"Error numero 2 en la conxeion de la Base de Datos"+e.getMessage(),JOptionPane.ERROR_MESSAGE);
 			conexion = null;
 			return false;
+		}
+	}
+	public void desconectar() {
+		try {
+			conexion.close();
+		} catch (Exception e) {
+			// TODO: handle exception
+			
 		}
 	}
 	
@@ -160,6 +179,30 @@ public class sql {
 		 
 		 
 	   }
+	public void getPan (JComboBox<Object> jcombobox,int id_cat){ 
+
+		 try{
+           Statement st = (Statement) conexion.createStatement();
+           ResultSet rs = st.executeQuery("select nombre_pan from panes where id_categoria="+id_cat+"");
+           
+			DefaultComboBoxModel combo = new DefaultComboBoxModel();
+			
+			combo.addElement("Seleccione un Pan");
+			jcombobox.setModel(combo);
+           while(rs.next()){
+          	 combo.addElement(rs.getString("nombre_pan"));
+          	 jcombobox.setModel(combo);
+          	 
+           }
+           rs.close();
+           
+       }catch(SQLException ex){
+           JOptionPane.showMessageDialog(null, ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+           
+       }
+		 
+		 
+	   }
 	
 	public void setUsuario(int id_cargo,String nombre,String app,String apm,String domicilio,String tel,String pass,float salario,String datein) {
 		String sql = "insert into usuarios2(id_cargo,nombre,app,apm,domicilio,telefono,pass,salario,fecha_ingreso)"
@@ -170,10 +213,10 @@ public class sql {
 				+ "'"+apm+"',"
 				+ "'"+domicilio+"',"
 				+ "'"+tel+"',"
-				+ "'"+pass+"',"
+				+ "MD5('"+pass+"'),"
 				+ "'"+salario+"',"
 				+ "'"+datein+"')";
-				
+			System.out.println(sql);
 		 try{
              Statement st = (Statement) conexion.createStatement();
             st.execute(sql);
@@ -190,7 +233,7 @@ public class sql {
 	                + "apm='"+apm+"',"
 	                + "domicilio='"+domicilio+"',"
 	                + "telefono='"+tel+"',"
-	                + "pass='"+pass+"',"
+	                + "pass=SHA('"+pass+"'),"
 	                + "salario="+salario+","
 	                + "fecha_ingreso='"+datein+"' "	                
 	                + "where id_usuario="+id+";";
@@ -300,7 +343,52 @@ public class sql {
 	        Statement st = (Statement) conexion.createStatement();
 	        ResultSet rs;
 	        Object[] rows = null;
-	        rs = st.executeQuery("SELECT p.descripcion,p.nombre,ca.nombre_categoria,p.pventa,p.fventa from producto as p inner join categoria_pan as ca on p.id_categoria=ca.id_categoria");
+	        rs = st.executeQuery("SELECT v.nombre_pan,ca.nombre_categoria,v.precio_unitario,v.cantidad_piezas,v.fventa from productos as p inner join categoria_pan as ca on p.id_categoria=ca.id_categoria inner join venta as v on v.id_venta=p.id_venta");
+	        java.sql.ResultSetMetaData rsm = rs.getMetaData();
+	        // crear una lista donde almacenare los datos
+	        ArrayList<Object[]> data=new ArrayList<>();
+	        // calcular el numero de filas y gebnerar la informacion para cada una
+	        while (rs.next()) {            
+	              rows=new Object[rsm.getColumnCount()];
+	             for (int i = 0; i < rows.length; i++) {
+	                // generar los datos de cada fila 
+	                 rows[i]=rs.getObject(i+1);
+	                 }
+	             // Guardar los datos consultados en una lista 
+	             data.add(rows);
+	         }
+	        // general el modelo de la tabla
+	        DefaultTableModel dtm =(DefaultTableModel) table.getModel();
+	        // eliminar los datos que exinten en el modelo de la tabla antes de agregar los datos 
+	        if (dtm.getRowCount() != 0){
+	            int d = dtm.getRowCount();
+	        for (int y = 0; y < d; y++){
+	            dtm.removeRow(0);
+	           }
+	        }
+	        table.setModel(dtm);
+	        // agregar los datos de la consulta a la tabla 
+	        for (int i = 0; i <data.size(); i++) {
+	             dtm.addRow(data.get(i));
+	            }   
+	        rs.close();
+	       
+	       
+	     }catch(SQLException ex){
+	        JOptionPane.showMessageDialog(null,ex.getMessage(), "¡ERROR!", JOptionPane.ERROR_MESSAGE);
+	        conexion=null;
+	        
+	     }
+		 
+	   }
+	
+	public void consultaVenta (JTable table){ 
+
+	    try{
+	        Statement st = (Statement) conexion.createStatement();
+	        ResultSet rs;
+	        Object[] rows = null;
+	        rs = st.executeQuery("SELECT pa.nombre_pan,ca.nombre_categoria,v.precio_unitario,v.cantidad_piezas,v.fventa from venta as v inner join categoria_pan as ca on v.id_categoria=ca.id_categoria inner join panes as pa on pa.id_pan=v.id_pan");
 	        java.sql.ResultSetMetaData rsm = rs.getMetaData();
 	        // crear una lista donde almacenare los datos
 	        ArrayList<Object[]> data=new ArrayList<>();
@@ -346,6 +434,31 @@ public class sql {
 			ResultSet result = st.executeQuery("select * from producto where nombre='"+name+"'");					       
 		        while (result.next()) {
 		        	nmo=result.getString("nombre");
+		        	//System.out.println(nmo);
+		        	if(nmo==name) 
+		        		return true;
+		        	else
+		        		return false;		       
+		
+		         }
+		        result.close();
+		        
+			
+		}catch(SQLException e) {
+			JOptionPane.showMessageDialog(null, e.getMessage(),"Error",JOptionPane.ERROR_MESSAGE);
+			return false;
+		}
+    	return true;
+		
+	}
+public boolean searchVen(String name) {
+		
+		String nmo = null;
+		try {
+			Statement st = (Statement) conexion.createStatement();
+			ResultSet result = st.executeQuery("select * from venta where nombre_pan='"+name+"'");					       
+		        while (result.next()) {
+		        	nmo=result.getString("nombre_pan");
 		        	//System.out.println(nmo);
 		        	if(nmo==name) 
 		        		return true;
@@ -433,6 +546,40 @@ public class sql {
 			ResultSet resul = st.executeQuery("select id_producto from producto where nombre='"+r+"'");
 			while(resul.next()) {
 				id=resul.getInt("id_producto");
+			}
+			resul.close();
+			return id;
+		} catch (SQLException e) {
+			// TODO: handle exception
+			JOptionPane.showMessageDialog(null, e.getMessage(),"Error",JOptionPane.ERROR_MESSAGE);
+			return 0;
+		}
+		
+	}
+	public int idVenta(int r) {
+		int id = 0;
+		try {
+			Statement st = (Statement) conexion.createStatement();
+			ResultSet resul = st.executeQuery("select id_venta from venta where id_categoria='"+r+"'");
+			while(resul.next()) {
+				id=resul.getInt("id_venta");
+			}
+			resul.close();
+			return id;
+		} catch (SQLException e) {
+			// TODO: handle exception
+			JOptionPane.showMessageDialog(null, e.getMessage(),"Error",JOptionPane.ERROR_MESSAGE);
+			return 0;
+		}
+		
+	}
+	public int idPan(String r) {
+		int id = 0;
+		try {
+			Statement st = (Statement) conexion.createStatement();
+			ResultSet resul = st.executeQuery("select id_pan from panes where nombre_pan='"+r+"'");
+			while(resul.next()) {
+				id=resul.getInt("id_pan");
 			}
 			resul.close();
 			return id;
@@ -535,13 +682,10 @@ public class sql {
 	}
 	
 	
-	public void setProducto(int id_categoria,String nombre,String descripcion,float pventa,String fventa) {
-		String sql="insert into producto(id_categoria,nombre,descripcion,pventa,fventa) values("				
+	public void setProducto(int id_categoria,int id_venta) {
+		String sql="insert into productos(id_categoria,id_venta) values("				
 				+ "'"+id_categoria+"',"
-				+ "'"+nombre+"',"
-				+ "'"+descripcion+"',"				
-				+ ""+pventa+","
-				+ "'"+fventa+"');";
+				+ ""+id_venta+");";								
 				
 		try {
 			Statement st = (Statement) conexion.createStatement();
@@ -554,10 +698,27 @@ public class sql {
 				
 	}
 	
-	public void editarProducto(int id,int id_categoria,String nombre,String descripcion,float pventa,String fventa) {
+	public void setVenta(int id_categoria,int id_pan,float precioU,int cantidad,String fventa) {
+		String sql="insert into venta(id_categoria,id_pan,precio_unitario,cantidad_piezas,fventa) values("				
+				+ "'"+id_categoria+"',"				
+				+ "'"+id_pan+"',"				
+				+ ""+precioU+","
+				+ ""+cantidad+","												
+				+ "'"+fventa+"');";		
+		try {
+			Statement st = (Statement) conexion.createStatement();
+			st.execute(sql);
+			JOptionPane.showMessageDialog(null, "Pan Agregado Correctammente");
+		} catch (SQLException e) {
+			// TODO: handle exception
+			JOptionPane.showMessageDialog(null, e.getMessage(),"Error",JOptionPane.ERROR_MESSAGE);
+		}
+				
+	}
+	
+	public void editarProducto(int id,int id_categoria,String nombre,float pventa,String fventa) {
 		String sql="update producto set id_categoria="+id_categoria+","
-				+ "nombre='"+nombre+"',"
-				+ "descripcion='"+descripcion+"',"				
+				+ "nombre='"+nombre+"',"				
 				+ "pventa="+pventa+","
 				+ "fventa='"+fventa+"' where id_producto="+id+";";
 		//System.out.println(sql);
@@ -569,6 +730,34 @@ public class sql {
 	                           Statement st = (Statement) conexion.createStatement();
 	                          st.execute(sql);
 	                           JOptionPane.showMessageDialog(null, "El producto a sido modificada");
+	                           
+	                          }catch(SQLException ex){
+	                              JOptionPane.showMessageDialog(null, ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+	                              
+	                             }   
+	                      break;
+	                  case 2:
+	                      JOptionPane.showMessageDialog(null, "Modificación  Cancelada");
+	                      
+	                      break;
+	              }
+	}
+	
+	public void editarVenta(int id,int id_categoria,int id_pan,float precioU,int cantidad,String fventa) {
+		String sql="update venta set id_categoria="+id_categoria+","
+				+ "id_pan="+id_pan+","
+				+ "precio_unitario="+precioU+","
+				+ "cantidad_piezas="+cantidad+","
+				+ "fventa='"+fventa+"' where id_venta="+id+";";
+		System.out.println(sql);
+		int dec = JOptionPane.showConfirmDialog(null, "Desea editar el pan seleccionado",
+	               "Confirmar Edicion", JOptionPane.OK_CANCEL_OPTION);
+			  switch(dec){
+	                  case 0:
+	                       try{
+	                           Statement st = (Statement) conexion.createStatement();
+	                          st.execute(sql);
+	                           JOptionPane.showMessageDialog(null, "El pan a sido modificada");
 	                           
 	                          }catch(SQLException ex){
 	                              JOptionPane.showMessageDialog(null, ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
@@ -606,6 +795,101 @@ public class sql {
 	             }
 		
 	}
+	public void eliminarVenta(int id,JTable table_1,int r) {
+		String sql="delete from venta where id_venta="+id+";";
+		int dec = JOptionPane.showConfirmDialog(null, "Desea eliminar el pan seleccionado",
+	              "Confirmar Eliminación", JOptionPane.OK_CANCEL_OPTION);
+			  switch(dec){
+	                 case 0:
+	                      try{
+	                          Statement st = (Statement) conexion.createStatement();
+	                         st.execute(sql);
+	                          JOptionPane.showMessageDialog(null, "El pan a sido eliminado");
+	                          DefaultTableModel dtm = (DefaultTableModel) table_1.getModel();
+	                          dtm.removeRow(r);
+	                         }catch(SQLException ex){
+	                             JOptionPane.showMessageDialog(null, ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+	                             
+	                            }   
+	                     break;
+	                 case 2:
+	                     JOptionPane.showMessageDialog(null, "Eliminación  Cancelada");
+	                     
+	                     break;
+	             }
+		
+	}
 	
+	public float getTotal() {
+		float res = 0;
+		 try{
+			 Statement st = (Statement) conexion.createStatement();
+				ResultSet resul = st.executeQuery("select SUM(precio_unitario*cantidad_piezas) as Total from venta");
+				while(resul.next()) {
+					res=resul.getFloat("Total");
+					
+				}
+				resul.close();
+				return res;         
+            }catch(SQLException ex){
+                JOptionPane.showMessageDialog(null, ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+                return 0;
+             }   
+		
+	}
+	
+	public ImageIcon getImage(int id_pan) throws IOException {
+		Array res = null;
+		ImageIcon newicon = null;
+		ImageIcon foto;
+		InputStream is;
+		 try{
+			 Statement st = (Statement) conexion.createStatement();
+				ResultSet resul = st.executeQuery("select imagen from imagenes where id_pan="+id_pan+"");
+				while(resul.next()) {
+					is=resul.getBinaryStream(1);
+					BufferedImage bi = ImageIO.read(is);
+					foto = new ImageIcon(bi);
+					Image img = foto.getImage();
+					Image newimg = img.getScaledInstance(214, 230, Image.SCALE_SMOOTH);
+					newicon = new ImageIcon(newimg);
+					
+				}
+				resul.close();
+				return newicon;       
+            }catch(SQLException ex){
+                JOptionPane.showMessageDialog(null, ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+                return null;
+             }   
+	}
+	
+	/*ArrayList<Imagen> getImagenes(int id_pan) {
+		 ArrayList<Imagen> lista = new ArrayList();
+		 try {
+			 Statement st = (Statement) conexion.createStatement();
+			 ResultSet rs = st.executeQuery("SELECT imagen,tipo FROM imagenes where id_pan="+id_pan+""); 
+		 while (rs.next())
+		 {
+			 Imagen imagen=new Imagen();
+			 Blob blob = (Blob) rs.getBlob("imagen");
+			 String nombre = rs.getObject("nombre").toString();
+			 byte[] data = blob.getBytes(1, (int)blob.length());
+			 BufferedImage img = null;
+		 try {
+			 img = ImageIO.read(new ByteArrayInputStream(data));
+		 } catch (IOException ex) {
+			 //Logger.getLogger(class.getName().log(Level.SEVERE, null, ex);
+		 }
+		 
+		 imagen.setImagen(img);
+		 imagen.setNombre(nombre);
+		 lista.add(imagen);
+		 }
+		 rs.close();
+		 } catch (SQLException ex) {
+			 //Logger.getLogger(BaseDatos.class.getName()).log(Level.SEVERE, null, ex);
+		 }
+		 return lista;
+		}*/
 	
 }

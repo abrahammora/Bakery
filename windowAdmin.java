@@ -22,6 +22,8 @@ import com.mysql.jdbc.Statement;
 
 import javax.swing.JLabel;
 import java.awt.Font;
+import java.awt.Frame;
+
 import javax.swing.JTextField;
 import javax.crypto.NullCipher;
 import javax.swing.DefaultComboBoxModel;
@@ -53,6 +55,8 @@ import java.awt.event.FocusEvent;
 import javax.swing.UIManager;
 import com.toedter.calendar.JDayChooser;
 import com.toedter.calendar.JDateChooser;
+import javax.swing.JSpinner;
+import javax.swing.JTextArea;
 
 public class windowAdmin extends JFrame {
 
@@ -86,7 +90,8 @@ public class windowAdmin extends JFrame {
 	private JTextField textFieldapm;
 	private JTextField textFieldsal;
 	private JTextField textFieldpass;
-	private JTextField textField_panno;
+	JComboBox comboBox_2;
+	JTextArea textArea;
 	/**
 	 * Launch the application.
 	 */
@@ -111,6 +116,7 @@ public class windowAdmin extends JFrame {
 	 * Create the frame.
 	 */
 	public windowAdmin() {
+		setTitle("Administrador");
 		//windowAdmin frame = new windowAdmin();
 		sql info = new sql();
 		validacion num = new validacion();
@@ -127,13 +133,42 @@ public class windowAdmin extends JFrame {
 		JMenu mnArchivo = new JMenu("Archivo");
 		menuBar.add(mnArchivo);
 		
-		JMenuItem mntmSalir = new JMenuItem("Salir");
+		JMenuItem mntmSalir = new JMenuItem("Salir");		
+		mntmSalir.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				
+				if(e.getSource()!=null) {
+				
+					int op = JOptionPane.showConfirmDialog(null, "Desea Salir del Sistema","Mensaje Confirmacion",JOptionPane.YES_OPTION);
+					switch(op) {
+							case 0: JOptionPane.showMessageDialog(null, "Hasta luego");System.exit(0);
+							break;
+							case 2: JOptionPane.showMessageDialog(null, "Confirmacion Cancelada");
+							break;
+					}
+				}
+				
+			}
+		});
 		mnArchivo.add(mntmSalir);
 		
 		JMenu mnOpciones = new JMenu("Opciones");
 		menuBar.add(mnOpciones);
 		
 		JMenuItem mntmUsuarios = new JMenuItem("Cambiar Usuario");
+		mntmUsuarios.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				
+				if(e.getSource()!=null) {					
+					dispose();
+					panaderia ini = new panaderia();
+					
+					
+					
+			}else
+				System.out.println(e.getActionCommand()+"Hola");
+			}
+		});
 		mnOpciones.add(mntmUsuarios);
 		
 		
@@ -151,6 +186,7 @@ public class windowAdmin extends JFrame {
 		
 			 relojpanaderia r = new relojpanaderia(reloj1,reloj2);
 		     r.start();
+		
 			
 		JTabbedPane tabbedPane = new JTabbedPane(JTabbedPane.TOP);
 		tabbedPane.setBounds(10, 11, 846, 446);
@@ -599,14 +635,14 @@ public class windowAdmin extends JFrame {
 		lblIdproducto.setBounds(10, 11, 97, 14);
 		panel_5.add(lblIdproducto);*/
 		
-		JLabel lblDescripcion = new JLabel("Descripcion:");
+		/*JLabel lblDescripcion = new JLabel("Descripcion:");
 		lblDescripcion.setFont(new Font("Tahoma", Font.BOLD, 12));
 		lblDescripcion.setBounds(10, 90, 76, 14);
-		panel_5.add(lblDescripcion);
+		panel_5.add(lblDescripcion);*/
 		
 		JLabel lblCategoria = new JLabel("Categoria:");
 		lblCategoria.setFont(new Font("Tahoma", Font.BOLD, 12));
-		lblCategoria.setBounds(252, 11, 76, 14);
+		lblCategoria.setBounds(273, 11, 76, 14);
 		panel_5.add(lblCategoria);
 		
 		/*JLabel lblPrecioCompra = new JLabel("Precio Compra:");
@@ -614,9 +650,9 @@ public class windowAdmin extends JFrame {
 		lblPrecioCompra.setBounds(252, 65, 97, 14);
 		panel_5.add(lblPrecioCompra);*/
 		
-		JLabel lblPrecioVenta = new JLabel("Precio Venta:");
+		JLabel lblPrecioVenta = new JLabel("Precio Unitario:");
 		lblPrecioVenta.setFont(new Font("Tahoma", Font.BOLD, 12));
-		lblPrecioVenta.setBounds(252, 90, 83, 14);
+		lblPrecioVenta.setBounds(10, 90, 104, 14);
 		panel_5.add(lblPrecioVenta);
 		
 		JLabel lblFechaIngreso = new JLabel("Fecha Venta:");
@@ -629,13 +665,19 @@ public class windowAdmin extends JFrame {
 		panel_5.add(textField_idpro);
 		textField_idpro.setColumns(10);*/
 		
-		textField_descrip = new JTextField();
+		/*textField_descrip = new JTextField();
 		textField_descrip.setBounds(109, 88, 86, 20);
 		panel_5.add(textField_descrip);
-		textField_descrip.setColumns(10);
+		textField_descrip.setColumns(10);*/
 		
 		JComboBox comboBox = new JComboBox();
-		comboBox.setBounds(359, 9, 86, 20);
+		comboBox.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				int id_cat=comboBox.getSelectedIndex();
+				info.getPan(comboBox_2, id_cat);
+			}
+		});
+		comboBox.setBounds(359, 9, 97, 20);
 		/*comboBox.addItem("Concha");
 		comboBox.addItem("Pastel");*/
 		info.getCategoria(comboBox);
@@ -647,7 +689,7 @@ public class windowAdmin extends JFrame {
 		textField_pcompra.setColumns(10);*/
 		
 		textField_pventa = new JTextField();
-		textField_pventa.setBounds(359, 88, 86, 20);
+		textField_pventa.setBounds(109, 88, 97, 20);
 		panel_5.add(textField_pventa);
 		textField_pventa.setColumns(10);
 		
@@ -693,14 +735,25 @@ public class windowAdmin extends JFrame {
 		lblNombre_1.setFont(new Font("Tahoma", Font.BOLD, 12));
 		lblNombre_1.setBounds(10, 15, 76, 14);
 		panel_5.add(lblNombre_1);
-		textField_panno = new JTextField();
-		textField_panno.setBounds(109, 11, 86, 20);
-		panel_5.add(textField_panno);
-		textField_panno.setColumns(10);
 		
 		JDateChooser dateChooser = new JDateChooser();		
 		dateChooser.setBounds(615, 11, 133, 20);
 		panel_5.add(dateChooser);
+		
+		JLabel lblCantidadDePiezas = new JLabel("Cantidad Piezas:");
+		lblCantidadDePiezas.setFont(new Font("Tahoma", Font.BOLD, 12));
+		lblCantidadDePiezas.setBounds(252, 90, 113, 14);
+		panel_5.add(lblCantidadDePiezas);
+		
+		JSpinner spinner = new JSpinner();
+		spinner.setBounds(359, 88, 86, 20);
+		panel_5.add(spinner);
+		
+		comboBox_2 = new JComboBox();
+		comboBox_2.setBounds(109, 9, 121, 20);
+		/*int id_cat=comboBox.getSelectedIndex();
+		info.getPan(comboBox_2, id_cat);*/
+		panel_5.add(comboBox_2);
 		
 		
 		JScrollPane scrollPane_1 = new JScrollPane();
@@ -725,13 +778,15 @@ public class windowAdmin extends JFrame {
 						
 							//row=table.getSelectedRow();
 							//textField_idpro.setText(table_1.getValueAt(row,0).toString());
-							textField_descrip.setText(table_1.getValueAt(row,0).toString());
-							textField_panno.setText(table_1.getValueAt(row,1).toString());
-							comboBox.setSelectedItem(table_1.getValueAt(row, 2).toString());
+							//textField_panno.setText(table_1.getValueAt(row,0).toString());						
+							//textField_descrip.setText(table_1.getValueAt(row,1).toString());
+							comboBox_2.setSelectedItem(table_1.getValueAt(row, 0).toString());
+							comboBox.setSelectedItem(table_1.getValueAt(row, 1).toString());
 							//textField_pcompra.setText(table_1.getValueAt(row,4).toString());
-							textField_pventa.setText(table_1.getValueAt(row,3).toString());
+							textField_pventa.setText(table_1.getValueAt(row,2).toString());
 							//textField_indate.setText(table_1.getValueAt(row, 4).toString());
 							dateChooser.setDate((Date) table_1.getValueAt(row, 4));
+							spinner.setValue(table_1.getValueAt(row, 3));
 					
 					
 				
@@ -745,10 +800,10 @@ public class windowAdmin extends JFrame {
 				{new Integer(1),"Pan bueno","Concha","Pastel","23","43","12/01/08"}
 			},
 			new String[] {
-				"Descripcion","Nombre" ,"Categoria", "Precio Venta", "Fecha Venta"
+				"Nombre","Categoria", "Precio Unitario","Cantidad Piezas","Fecha Venta"
 			}
 		));
-		info.consultaProducto(table_1);
+		info.consultaVenta(table_1);
 		scrollPane_1.setViewportView(table_1);
 		
 		JButton btnAgregar_1 = new JButton("Agregar");
@@ -759,11 +814,12 @@ public class windowAdmin extends JFrame {
 				String id;
 				String des=null;
 				String cate=(String) comboBox.getSelectedItem();
-				String nom;
+				String nom=(String) comboBox_2.getSelectedItem();
 				String pventa;
 				String fingre=null;
-				String name=textField_panno.getText();
-				des=textField_descrip.getText().toString();
+				int id_pan=info.idPan(nom);
+				//des=textField_descrip.getText().toString();
+				String cantidad=spinner.getValue().toString();
 				//fingre=textField_indate.getText().toString();
 				//id=textField_idpro.getText().toString();
 				//pcmpra=textField_pcompra.getText().toString();
@@ -782,7 +838,7 @@ public class windowAdmin extends JFrame {
 				 boolean flag=false;
 				 //ArrayList<Object[]> nombres= new ArrayList<Object[]>();
 				 //nombres=info.searchPro(name);				
-				if(!name.equals("")&&!fingre.equals("")&&!pventa.equals("")) {													
+				if(/*!name.equals("")&&*/!fingre.equals("")&&!pventa.equals("")) {													
 							 if(num.isNumeric(pventa)) {
 							/* DefaultTableModel dtm = (DefaultTableModel) table_1.getModel();
 							 Object[] obj = new Object[7];
@@ -800,22 +856,25 @@ public class windowAdmin extends JFrame {
 										 flag=true;
 								 }*/
 									
-								 if(!info.searchPro(name)) {
+								/* if(!info.searchPro(name)) {
 									
 									     JOptionPane.showMessageDialog(null, "El producto ya existe","Error",JOptionPane.ERROR_MESSAGE);
-								 }else {
+								 }else {*/
 									 		
-									 info.setProducto(id_categoria, name, des, Float.parseFloat(pventa), fingre);
-									 info.consultaProducto(table_1);
-						     
+									 
+									 
+									 info.setVenta(id_categoria,id_pan,Float.parseFloat(pventa),Integer.parseInt(cantidad), fingre);
+									 info.consultaVenta(table_1);
+									 textArea.setText(Float.toString(info.getTotal()));
 								     //textField_idpro.setText("");
 								     //textField_indate.setText("");
-								     textField_descrip.setText("");
-								     textField_panno.setText("");
+								     //textField_descrip.setText("");
+								     //textField_panno.setText("");
 								     //textField_pcompra.setText("");
 								     textField_pventa.setText("");
 								     dateChooser.setDate(null); 
-								 }
+								     spinner.setValue(0);
+								 //}
 									 
 								 
 							 }else 
@@ -839,24 +898,26 @@ public class windowAdmin extends JFrame {
 		btnModificar_1.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				//String id=textField_idpro.getText();
-				String des=textField_descrip.getText();
+				//String des=textField_descrip.getText();
 				String cate=(String) comboBox.getSelectedItem();
 				//String pcmpra=textField_pcompra.getText();
 				String pventa=textField_pventa.getText();
 				String fingre;
-				String name=textField_panno.getText();		
+				String name = (String) comboBox_2.getSelectedItem();
 				String dia = Integer.toString(dateChooser.getCalendar().get(Calendar.DAY_OF_MONTH));
 				String mes = Integer.toString(dateChooser.getCalendar().get(Calendar.MONTH) + 1);
 				String year = Integer.toString(dateChooser.getCalendar().get(Calendar.YEAR));
-
+				String cantidad=spinner.getValue().toString();
 				 fingre = (year + "-" + mes + "-" + dia);
 				// System.out.println(fingre);
+				int id_pan=info.idPan(name);
 				int id_categoria=comboBox.getSelectedIndex();
 				int row = table_1.getSelectedRow();
-				int id=info.idProducto(name);
+				int id=info.idVenta(id_categoria);
 				if(row>=0) {
-					info.editarProducto(id, id_categoria, name, des,Float.parseFloat(pventa), fingre);
-					info.consultaProducto(table_1);
+					info.editarVenta(id, id_categoria,id_pan,Float.parseFloat(pventa),Integer.parseInt(cantidad),fingre);
+					info.consultaVenta(table_1);
+					textArea.setText(Float.toString(info.getTotal()));
 					/*table_1.setValueAt(id, row, 0);
 					table_1.setValueAt(des, row, 1);
 					table_1.setValueAt(name, row, 2);
@@ -866,8 +927,8 @@ public class windowAdmin extends JFrame {
 					table_1.setValueAt(fingre, row, 6);*/
 					
 					//textField_idpro.setText("");
-					textField_descrip.setText("");
-					textField_panno.setText("");
+					//textField_descrip.setText("");
+					//textField_panno.setText("");
 					//(String) comboBox.getSelectedItem();
 					//textField_pcompra.setText("");
 					textField_pventa.setText("");
@@ -892,9 +953,9 @@ public class windowAdmin extends JFrame {
 				//String pcmpra=textField_pcompra.getText();
 				//String pventa=textField_pventa.getText();
 				//String fingre=textField_indate.getText();
-				String name=textField_panno.getText();
+				int name=comboBox.getSelectedIndex();
 				int row = table_1.getSelectedRow();
-				int id=info.idProducto(name);
+				int id=info.idVenta(name);
 				if(row>=0) {					
 					//table_1.setValueAt(id, row, 0);
 					/*table_1.setValueAt(des, row, 0);
@@ -904,17 +965,18 @@ public class windowAdmin extends JFrame {
 					table_1.setValueAt(pventa, row, 4);
 					table_1.setValueAt(fingre, row, 5);*/
 					
-					info.eliminarProducto(id,table_1,row);
+					info.eliminarVenta(id,table_1,row);
+					textArea.setText(Float.toString(info.getTotal()));
 					/*DefaultTableModel dtm = (DefaultTableModel) table_1.getModel();
 					int r = table_1.getSelectedRow();
 					dtm.removeRow(r);*/
 					
-					textField_descrip.setText("");
+					//textField_descrip.setText("");
 					//String cate=(String) comboBox.getSelectedItem();
 					//textField_pcompra.setText("");
 					textField_pventa.setText("");
 					dateChooser.setDate(null);
-					textField_panno.setText("");
+					//textField_panno.setText("");
 				
 				
 				}else
@@ -933,6 +995,17 @@ public class windowAdmin extends JFrame {
 		});
 		btnActualizar_2.setBounds(650, 298, 110, 23);
 		panel_4.add(btnActualizar_2);
+		
+		 textArea = new JTextArea();
+		textArea.setBounds(617, 385, 214, 22);
+		panel_4.add(textArea);
+		//windowVentas p = new windowVentas();
+		textArea.setText(Float.toString(info.getTotal()));
+		
+		JLabel lblTotalAPagar = new JLabel("Total a Pagar:");
+		lblTotalAPagar.setFont(new Font("Tahoma", Font.BOLD, 12));
+		lblTotalAPagar.setBounds(485, 390, 103, 14);
+		panel_4.add(lblTotalAPagar);
 		//USUARIOS
 		JPanel panel_6 = new JPanel();
 		panel_6.setBackground(new Color(0, 128, 128));
@@ -1245,7 +1318,7 @@ public class windowAdmin extends JFrame {
 						       obj[9]= date;
 						       obj[10]= expdate;*/						      						      
 								if(info.searchUser(name)) {
-									  info.setUsuario(id_cargo,name, app, apm, dom, pass,tel,Float.parseFloat(salario), date);
+									 // info.setUsuario(id_cargo,name, app, apm, dom, pass,tel,Float.parseFloat(salario), date);
 								      info.consultas(table_2);
 								     //dtm.addRow(obj);
 								     //table_2.setModel(dtm);
